@@ -54,6 +54,9 @@ class CoreTests(unittest.TestCase):
    result=research.generate('2026-10-09',True);self.assertEqual(result['status'],'skipped');self.assertEqual(store.call_count,1)
 
 class APITests(unittest.TestCase):
+ def setUp(self):
+  isolated=patch.dict(os.environ,{'AI_PROVIDER':'','OPENAI_API_KEY':'','ANTHROPIC_API_KEY':''})
+  isolated.start();self.addCleanup(isolated.stop)
  @classmethod
  def setUpClass(cls):
   cls.tmp=tempfile.TemporaryDirectory();cls.dir=Path(cls.tmp.name);cls.oldcore=core.DATA;cls.oldserver=server.DATA

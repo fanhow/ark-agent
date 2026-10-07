@@ -123,6 +123,32 @@ def events(day):
     out+=extra;coverage+=extra_sources
     return sorted(out,key=lambda x:(x['time'] is None, (x['time'] or '')[:10]!=day,-x['importance'],x['time'] or '')),coverage
 
+def research_prompt(brief,crew):
+    # Only source evidence enters the prompt; placeholders are UI fallback, not research.
+    evidence={k:brief[k] for k in ['date','market','macro','recap','radio','board','sources','calendar','gaps'] if k in brief}
+    return ('依提供的真實資料產出 JSON {"headline":字串,"stance":{"score":-2到2或null,"label":字串},'
+            '"lenses":{每個id:{"stance":-2到2或null,"take":80至130字,"watch":字串}},"radioPoints":陣列}。'
+            '8 人逐一依其公開框架分析資料，清楚標示「依其公開框架推演」，非本人發言，不虛構不同意見。'
+            '每位 take 必須說明一項已提供的觀察與一項資料限制；若沒有可用證據，具體說明缺什麼。'
+            'stance 可為 null，不強迫推測方向；不要輸出金鑰未設定或 AI 尚未完成之類的系統狀態。'
+            '勿編造今日事件或人物現職。Podcast 僅依 description 摘要；不延伸原文。'
+            '所有數值與日期只能引用提供資料。資料日期落後時明說。\n人物：'
+            +json.dumps(crew,ensure_ascii=False)+'\n來源證據：'+json.dumps(evidence,ensure_ascii=False))
+
+def validate_ai_result(brief,result):
+    candidate=dict(brief)
+    for k in ['headline','stance','lenses']:candidate[k]=result[k]
+    validate_brief(candidate)
+    for pid,v in candidate['lenses'].items():
+        if any(not isinstance(v.get(k),str) or not v[k].strip() for k in ['take','watch']):
+            raise ValueError('人物推演格式不完整')
+        if v['take']==brief['lenses'][pid]['take'] or '未設定金鑰或尚未完成' in v['take']:
+            raise ValueError('人物推演仍是待更新提示，未完成新分析')
+    points=result.get('radioPoints',[])
+    if not isinstance(points,list) or any(not isinstance(x,str) for x in points):
+        raise ValueError('Podcast 摘要格式無效')
+    return candidate,points
+
 def generate(day=None,scheduled=False):
     day=valid_date(day or today());cal=calendar(day)
     if scheduled and cal['isTradingDay'] is not True:
@@ -143,15 +169,8 @@ def generate(day=None,scheduled=False):
     brief={'date':day,'generatedAt':now(),'headline':f'已整理 {len(valid)} 項可取得的市場資料。先確認各項資料日期，再檢視風險與紀律。','stance':{'score':None,'label':'盤勢立場待研究'},'market':markets[:6],'macro':macro,'recap':recap,'radio':radio_data,'board':{'status':'unavailable','note':'看板為 App 會員限定，今日未納入；Threads @arkerationapp 查不到／待更新。','items':[]},'lenses':lenses,'sources':sources,'calendar':cal,'status':'partial','note':'真實來源擷取完成，但總經覆蓋尚未齊全。所有金額與漲跌僅代表標示日期，利率用中性色。','gaps':['總經排程採 BLS、BEA 與 Fed 官方來源；空白不代表今天沒有重大事件','ISM／初領失業金／零售／台灣出口／央行／外資與國際事件的完整自動研究仍待接可靠資料源；Fed 談話僅取官方已發布項目','總經市場預期值及實際公布值待可靠來源','Spotify ID 尚未確認可用；會員看板與 Threads 未讀取','未定義崩跌、連續未執行與規則優先順序；衝突時不產生交易指令']}
     if ai.configured():
         try:
-            prompt='依提供的真實資料產出 JSON {"headline":字串,"stance":{"score":-2到2或null,"label":字串},"lenses":{每個id:{"stance":-2到2或null,"take":80至130字,"watch":字串}},"radioPoints":陣列}。8 人逐一依其公開框架推演，不虛構不同意見。資料不足可全部待更新，勿編造今日事件或人物現職。Podcast 僅依 description 摘要；不延伸原文。所有數值與日期只能引用提供資料。資料日期落後時明說。\n人物：'+json.dumps(crew,ensure_ascii=False)+'\n今日來源：'+json.dumps(brief,ensure_ascii=False)
-            result=ai.parse_json(ai.call(prompt,json_mode=True))
-            candidate=dict(brief)
-            for k in ['headline','stance','lenses']:candidate[k]=result[k]
-            validate_brief(candidate)
-            for v in candidate['lenses'].values():
-                if not isinstance(v.get('take'),str) or not isinstance(v.get('watch'),str):raise ValueError('人物推演格式不完整')
-            points=result.get('radioPoints',[])
-            if not isinstance(points,list) or any(not isinstance(x,str) for x in points):raise ValueError('Podcast 摘要格式無效')
+            result=ai.parse_json(ai.call(research_prompt(brief,crew),json_mode=True))
+            candidate,points=validate_ai_result(brief,result)
             for k in ['headline','stance','lenses']:brief[k]=candidate[k]
             brief['radio']['points']=points;brief['aiGenerated']=True
         except Exception as e:brief['gaps'].append('AI 推演未完成：'+str(e));brief['aiGenerated']=False
