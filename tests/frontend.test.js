@@ -2,9 +2,9 @@ import test from 'node:test';import assert from 'node:assert/strict';import {gro
 import {journalWaterline,validateJournal,finalizeJournal} from '../lib.js';
 test('journal rejects invented price levels and changed waterline rules before saving',()=>{
  const p={asOf:'2026-09-30',totalPnl:0,rules:{p1:-15,p3:-8,p2:5},positions:[{code:'0056',name:'測試',ret:null,pnl:0,shares:null,value:null}]};
- const b={date:'2026-10-08',market:[{value:49806.37,change:-0.03,asOf:'2026-10-07'}]};
+ const b={date:'2026-10-08',market:[{value:49806.37,change:0.578,asOf:'2026-10-07'}]};
  const valid='Day 339，損益 0。\n'+journalWaterline(p);
- assert.doesNotThrow(()=>validateJournal(valid,p,b,339));
+ assert.doesNotThrow(()=>validateJournal(valid+' 0.58%',p,b,339));
  assert.throws(()=>validateJournal(valid+'\n支撐位約 49000 點。',p,b,339),/來源未提供/);
  assert.throws(()=>validateJournal(valid+'\n利率警戒線 5.5%。',p,b,339),/來源未提供/);
  assert.throws(()=>validateJournal(valid.replace('P1：','P1 更改：'),p,b,339),/水位規則/);

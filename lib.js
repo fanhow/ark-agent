@@ -12,7 +12,7 @@ export function validateJournal(text,p,brief,day){
  for(const line of journalWaterline(p).split('\n'))if(!plain.includes(line))throw new Error('AI 改寫了既有水位規則，未存入日誌，請重試。');
  const values=[1,2,3,day,p.positions.length,...['P1','P2','P3','正常持有','待更新'].map(k=>p.positions.filter(x=>group(x,p.rules)===k).length),p.asOf,p.totalPnl,...Object.values(p.rules),...p.positions.flatMap(x=>[x.code,x.name,x.shares,x.ret,x.pnl,x.value]),brief.date,...(brief.market||[]).flatMap(x=>[x.label,x.value,x.change,x.asOf])];
  const numbers=s=>[...String(s??'').matchAll(/-?\d+(?:,\d{3})*(?:\.\d+)?/g)].map(x=>Math.abs(Number(x[0].replaceAll(',',''))));
- const allowed=new Set(values.flatMap(numbers));
+ const allowed=new Set(values.flatMap(numbers).flatMap(n=>[n,...[0,1,2].map(d=>Number(n.toFixed(d)))]));
  if(numbers(plain).some(n=>!allowed.has(n)))throw new Error('AI 含有來源未提供的數字，未存入日誌，請核對後重試。');
 }
 export const mergePositions=(old,rows)=>{const m=new Map(old.map(p=>[p.code,{...p}]));for(const p of rows){const q=m.get(p.code)||{};for(const [k,v] of Object.entries(p))if(v!==null&&v!=='')q[k]=v;m.set(p.code,m.has(p.code)?q:{...p});}return [...m.values()];};
