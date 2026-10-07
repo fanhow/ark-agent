@@ -8,7 +8,7 @@ from research import generate, validate_brief
 
 def publish(brief):
  validate_brief(brief)
- allowed=['date','generatedAt','headline','stance','market','macro','recap','radio','board','lenses','sources','calendar','status','note','gaps','aiGenerated']
+ allowed=['date','generatedAt','headline','stance','market','macroRadar','macro','recap','radio','board','lenses','sources','calendar','status','note','gaps','aiGenerated']
  public={k:brief[k] for k in allowed if k in brief}
  target=ROOT/'public/briefs';atomic(target/(brief['date']+'.json'),public)
  index=[]

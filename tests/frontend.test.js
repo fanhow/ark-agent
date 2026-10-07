@@ -25,3 +25,24 @@ test('later nonempty values only; zero retained',()=>{const out=mergePositions([
 
 test('UTF-8 SSE survives split multibyte bytes',async()=>{const data=new TextEncoder().encode('event: delta\ndata: {"text":"臺灣繁體"}\n\nevent: done\ndata: {}\n\n');const stream=new ReadableStream({start(c){for(const b of data)c.enqueue(new Uint8Array([b]));c.close();}});let result='';await consumeSSE(new Response(stream),s=>result+=s);assert.equal(result,'臺灣繁體');});
 test('missing completion event rejects partial stream',async()=>{await assert.rejects(consumeSSE(new Response('event: delta\ndata: {"text":"partial"}\n\n'),()=>{}),/串流未完成/);});
+
+test('macro readings preserve FX direction, volatility meaning, and missing observations',async()=>{
+ const {macroReading,renderMacro}=await import('../macro.js');
+ assert.match(macroReading({id:'yen',value:147,change:-2}),/日圓升值/);
+ assert.match(macroReading({id:'yen',value:157,change:1}),/日圓貶值/);
+ assert.match(macroReading({id:'vix',value:16,change:-1}),/不能直接推論股市上漲/);
+ assert.match(macroReading({id:'conditions',value:-.494,change:.016}),/較寬鬆.*相較上週走緊/);
+ assert.match(macroReading({id:'gold',value:null,change:null}),/保留空值/);
+ assert.match(renderMacro(null),/歷史日報尚無跨資產資料/);
+ assert.match(renderMacro(null),/https:\/\/stable-value.fanhow.chatgpt.site\/sentiment/);
+ assert.ok(!renderMacro({items:[{id:'gold',value:null,change:null,label:'<script>',source:'javascript:alert(1)',history:[]}]}).includes('<script>'));
+});
+test('macro evidence reaches AI and journal numeric guard without chart-history noise',async()=>{
+ const {briefEvidence}=await import('../lib.js');
+ const p={asOf:'2026-09-30',totalPnl:0,rules:{p1:-15,p3:-8,p2:5},positions:[]};
+ const b={date:'2026-10-08',market:[],macroRadar:{items:[{id:'yen',label:'日圓',value:157.81,change:.114,asOf:'2026-10-02',previousAsOf:'2026-10-01',history:[{value:199.88}]}]}};
+ assert.equal(briefEvidence(b).macroRadar.items[0].history,undefined);
+ assert.equal(b.macroRadar.items[0].history.length,1);
+ assert.doesNotThrow(()=>validateJournal(journalWaterline(p)+' 日圓 157.81，變動 0.11%。',p,b,339));
+ assert.throws(()=>validateJournal(journalWaterline(p)+' 日圓目標價 162.34。',p,b,339),/來源未提供/);
+});

@@ -7,6 +7,7 @@ from xml.etree import ElementTree as ET
 from zoneinfo import ZoneInfo
 from core import DATA, ROOT, TZ, now, today, atomic, read, valid_date
 import ai
+import macro_research
 UA='Mozilla/5.0 (compatible; ArkLocalResearch/1.0)'
 
 def fetch(url):
@@ -125,12 +126,15 @@ def events(day):
 
 def research_prompt(brief,crew):
     # Only source evidence enters the prompt; placeholders are UI fallback, not research.
-    evidence={k:brief[k] for k in ['date','market','macro','recap','radio','board','sources','calendar','gaps'] if k in brief}
+    evidence={k:brief[k] for k in ['date','market','macro','recap','radio','board','sources','calendar','gaps','macroRadar'] if k in brief}
+    if 'macroRadar' in evidence:
+        evidence['macroRadar']={**evidence['macroRadar'],'items':[{k:v for k,v in x.items() if k!='history'} for x in evidence['macroRadar']['items']]}
     return ('依提供的真實資料產出 JSON {"headline":字串,"stance":{"score":-2到2或null,"label":字串},'
             '"lenses":{每個id:{"stance":-2到2或null,"take":80至130字,"watch":字串}},"radioPoints":陣列}。'
             '8 人逐一依其公開框架分析資料，清楚標示「依其公開框架推演」，非本人發言，不虛構不同意見。'
             '每位 take 必須說明一項已提供的觀察與一項資料限制；若沒有可用證據，具體說明缺什麼。'
             'stance 可為 null，不強迫推測方向；不要輸出金鑰未設定或 AI 尚未完成之類的系統狀態。'
+            '跨資產資料要核對各自日期；原油不是通用避險工具，USD/JPY 下跌代表日圓升值，VIX 衡量波動不是下跌機率。不可宣稱已讀取 researchUrl 指向的頁面。'
             '勿編造今日事件或人物現職。Podcast 僅依 description 摘要；不延伸原文。'
             '所有數值與日期只能引用提供資料。資料日期落後時明說。\n人物：'
             +json.dumps(crew,ensure_ascii=False)+'\n來源證據：'+json.dumps(evidence,ensure_ascii=False))
@@ -156,9 +160,9 @@ def generate(day=None,scheduled=False):
         atomic(DATA/'last-run.json',result);return result
     with concurrent.futures.ThreadPoolExecutor(max_workers=10) as pool:
         jobs=[pool.submit(market_tw,day),pool.submit(market_tw,day,True),pool.submit(market_us,'^GSPC','S&P 500',day),pool.submit(market_us,'^IXIC','那斯達克',day),pool.submit(rate,day,'DGS10','美國 10 年債殖利率'),pool.submit(policy_rate,day),pool.submit(market_us,'^DJI','道瓊',day),pool.submit(market_us,'^SOX','費城半導體',day)]
-        radiop=pool.submit(radio,day);eventp=pool.submit(events,day)
-        markets=[j.result() for j in jobs];radio_data=radiop.result();macro,coverage=eventp.result()
-    sources=[{'title':x['label'],'url':x['source'],'dataDate':x['asOf'],'fetchedAt':x['fetchedAt'],'status':'ok' if x['value'] is not None else 'unavailable'} for x in markets]
+        radiop=pool.submit(radio,day);eventp=pool.submit(events,day);radarp=pool.submit(macro_research.collect,day,fetch,now())
+        markets=[j.result() for j in jobs];radio_data=radiop.result();macro,coverage=eventp.result();radar=radarp.result()
+    sources=[{'title':x['label'],'url':x['source'],'dataDate':x['asOf'],'fetchedAt':x['fetchedAt'],'status':'ok' if x['value'] is not None else 'unavailable'} for x in markets+radar['items']]
     sources+=coverage+[{'title':'證交所開休市日曆','url':cal['source'],'dataDate':day,'fetchedAt':cal['fetchedAt']},{'title':'方舟運算 RSS','url':radio_data['source'],'dataDate':radio_data['date'],'fetchedAt':radio_data['fetchedAt']}]
     crew=read(ROOT/'crew.json',[])
     lenses={p['id']:{'stance':None,'take':'依其公開框架，可關注'+p['framework']+'。今日 AI 推演查不到／待更新，未設定金鑰或尚未完成。','watch':p['watch']} for p in crew}
@@ -166,7 +170,7 @@ def generate(day=None,scheduled=False):
     recap=[]
     for x in markets[2:4]+markets[6:]:
         recap.append(f'{x["label"]}：{x["asOf"]} 收盤 {x["value"]:,.2f}，漲跌 {x["change"]:+.2f}%。' if x['value'] is not None else x['label']+'：查不到／待更新。')
-    brief={'date':day,'generatedAt':now(),'headline':f'已整理 {len(valid)} 項可取得的市場資料。先確認各項資料日期，再檢視風險與紀律。','stance':{'score':None,'label':'盤勢立場待研究'},'market':markets[:6],'macro':macro,'recap':recap,'radio':radio_data,'board':{'status':'unavailable','note':'看板為 App 會員限定，今日未納入；Threads @arkerationapp 查不到／待更新。','items':[]},'lenses':lenses,'sources':sources,'calendar':cal,'status':'partial','note':'真實來源擷取完成，但總經覆蓋尚未齊全。所有金額與漲跌僅代表標示日期，利率用中性色。','gaps':['總經排程採 BLS、BEA 與 Fed 官方來源；空白不代表今天沒有重大事件','ISM／初領失業金／零售／台灣出口／央行／外資與國際事件的完整自動研究仍待接可靠資料源；Fed 談話僅取官方已發布項目','總經市場預期值及實際公布值待可靠來源','Spotify ID 尚未確認可用；會員看板與 Threads 未讀取','未定義崩跌、連續未執行與規則優先順序；衝突時不產生交易指令']}
+    brief={'date':day,'generatedAt':now(),'headline':f'已整理 {len(valid)} 項可取得的市場資料。先確認各項資料日期，再檢視風險與紀律。','stance':{'score':None,'label':'盤勢立場待研究'},'market':markets[:6],'macroRadar':radar,'macro':macro,'recap':recap,'radio':radio_data,'board':{'status':'unavailable','note':'看板為 App 會員限定，今日未納入；Threads @arkerationapp 查不到／待更新。','items':[]},'lenses':lenses,'sources':sources,'calendar':cal,'status':'partial','note':'真實來源擷取完成，但總經覆蓋尚未齊全。所有金額與漲跌僅代表標示日期，利率用中性色。','gaps':['總經排程採 BLS、BEA 與 Fed 官方來源；空白不代表今天沒有重大事件','ISM／初領失業金／零售／台灣出口／央行／外資與國際事件的完整自動研究仍待接可靠資料源；Fed 談話僅取官方已發布項目','總經市場預期值及實際公布值待可靠來源','Spotify ID 尚未確認可用；會員看板與 Threads 未讀取','未定義崩跌、連續未執行與規則優先順序；衝突時不產生交易指令']}
     if ai.configured():
         try:
             result=ai.parse_json(ai.call(research_prompt(brief,crew),json_mode=True))

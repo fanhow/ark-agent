@@ -10,7 +10,7 @@ out.mkdir(parents=True,exist_ok=True)
 for old in out.iterdir():
  if old.is_dir():shutil.rmtree(old)
  else:old.unlink()
-for name in ['index.html','app.js','lib.js','storage.js','styles.css','crew.json']:shutil.copy2(ROOT/name,out/name)
+for name in ['index.html','app.js','lib.js','macro.js','storage.js','styles.css','crew.json']:shutil.copy2(ROOT/name,out/name)
 shutil.copytree(ROOT/'assets',out/'assets')
 (out/'data').mkdir();shutil.copy2(ROOT/'data/portfolio.initial.json',out/'data/portfolio.initial.json')
 shutil.copytree(ROOT/'public/briefs',out/'data/briefs')

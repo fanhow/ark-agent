@@ -176,7 +176,7 @@ class Handler(BaseHTTPRequestHandler):
         if path.startswith('/api/briefs/'):
             d=valid_date(path.rsplit('/',1)[1]);obj=read(DATA/'briefs'/f'{d}.json');self.respond(obj if obj else {'error':'查不到／待更新'},200 if obj else 404);return
         if path=='/api/journal':self.respond([read(p) for p in sorted((DATA/'journal').glob('????-??-??.json'),reverse=True)]);return
-        allowed={'/':'index.html','/index.html':'index.html','/app.js':'app.js','/styles.css':'styles.css','/crew.json':'crew.json','/lib.js':'lib.js','/storage.js':'storage.js','/config.json':'config.json'}
+        allowed={'/':'index.html','/index.html':'index.html','/app.js':'app.js','/styles.css':'styles.css','/crew.json':'crew.json','/lib.js':'lib.js','/macro.js':'macro.js','/storage.js':'storage.js','/config.json':'config.json'}
         if path in allowed:p=ROOT/allowed[path]
         elif re.fullmatch(r'/assets/(buffett|marks|dalio|druckenmiller|wood|huang|wei|nadella)\.svg',path):p=ROOT/path[1:]
         elif re.fullmatch(r'/data/avatars/(buffett|marks|dalio|druckenmiller|wood|huang|wei|nadella)\.jpg',path):p=DATA/'avatars'/Path(path).name
