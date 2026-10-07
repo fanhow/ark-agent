@@ -23,18 +23,11 @@ python3 server.py
 
 ## 啟用 AI
 
-尚未提供 `ANTHROPIC_API_KEY`。目前可用盤勢資料、庫存手動編輯、規則調整、標準 CSV／TSV 匯入、頭像與歷史讀取。AI 聊天、截圖／非標準文字辨識、每日人物推演與複盤須設定金鑰。**Codex 帳號與用量不等於已設定 Anthropic API**。
+AI 聊天、截圖／非標準文字辨識、每日人物推演與複盤使用專用 OpenAI API 金鑰。本機 `.env` 設定 `AI_PROVIDER=openai`、`OPENAI_API_KEY` 與 `OPENAI_MODEL`（預設 `gpt-4.1-mini`）。金鑰透過 OpenAI Developers 的安全建立流程寫入；不要把金鑰貼入網站、README 或聊天。ChatGPT 聊天會員不會自動為本專案提供 API 金鑰或額度。
 
-可在啟動 server 的環境設定 `ANTHROPIC_API_KEY`；或使用本機後端專用設定檔：
+`.env` 僅由後端讀取，環境變數優先。只解析 AI 提供者、金鑰與模型設定，不執行 shell。既有 Anthropic 設定保留相容性，選用時設定 `AI_PROVIDER=anthropic`。
 
-```sh
-cp .env.example .env
-chmod 600 .env
-```
-
-用文字編輯器在 `.env` 填入 `ANTHROPIC_API_KEY`，再重新啟動 server。每日腳本也讀取同一份後端設定。不要把真實金鑰貼入網站、README 或聊天。環境變數優先於 `.env`；檔案只解析兩個設定值，不執行 shell。
-
-`ANTHROPIC_MODEL` 預設 `claude-sonnet-4-5`，可改為帳戶有權使用、支援 Messages 與 vision 的 Anthropic 模型。真實模型權限、額度、輸出品質與 API 費用尚未驗證；設定金鑰後才可做端到端實測。參考 [Anthropic Messages API](https://platform.claude.com/docs/en/api/overview) 與 [串流文件](https://platform.claude.com/docs/en/build-with-claude/streaming)。
+OpenAI 使用 [Responses API](https://developers.openai.com/api/docs/guides/text)、圖片輸入與串流，設定 `store:false`；未完成或長度遭截斷的內容不會當作成功回覆。真實模型權限、額度與輸出品質須在金鑰建立後實測。
 
 ## 每日執行與排程
 
@@ -134,4 +127,4 @@ python3 scripts/build_pages.py
 
 `.github/workflows/pages.yml` 已設定 push／手動部署，以及台北時間週一至五 07:52 的日報更新。排程先查交易日，成功後保存公開歷史並重新部署。GitHub Actions 排程可能延遲，不保證準時啟動；[官方排程說明](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#schedule)。目前本機 Codex 排程繼續更新本機版，雲端工作更新線上版，兩者資料位置各自獨立。
 
-GitHub Pages 提供靜態託管，線上版目前沒有互動 AI 代理；聊天、截圖辨識與 AI 複盤會提示尚未啟用。可在 repository 的 Actions secret 設定 `ANTHROPIC_API_KEY`，供雲端每日研究產生公開框架推演；這不會啟用使用者即時聊天。即時 AI 功能需另行部署有驗證與金鑰保護的後端，前端不可放金鑰。[GitHub Pages 官方說明](https://docs.github.com/en/pages/getting-started-with-github-pages/what-is-github-pages)。
+GitHub Pages 提供靜態託管，線上版目前沒有互動 AI 代理；聊天、截圖辨識與 AI 複盤會提示尚未啟用。可在 repository 的 Actions secret 設定 `OPENAI_API_KEY`，供雲端每日研究產生公開框架推演；這不會啟用使用者即時聊天。即時 AI 功能需另行部署有驗證與金鑰保護的後端，前端不可放金鑰。[GitHub Pages 官方說明](https://docs.github.com/en/pages/getting-started-with-github-pages/what-is-github-pages)。

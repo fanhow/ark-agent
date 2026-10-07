@@ -150,7 +150,7 @@ class Handler(BaseHTTPRequestHandler):
             if parsed['totalPnl'] is not None:result['totalPnl']=parsed['totalPnl']
             result['note']+=name+'：'+parsed['note']+'；'
         if images or unknown:
-            if not ai.configured():raise ValueError('未設定 AI 金鑰：截圖與非標準文字需 ANTHROPIC_API_KEY；標準 CSV 可直接辨識')
+            if not ai.configured():raise ValueError('未設定 AI 金鑰：截圖與非標準文字需 OPENAI_API_KEY；標準 CSV 可直接辨識')
             refs=[{'code':p['code'],'name':p['name']} for p in read(DATA/'portfolio.json')['positions']]
             extracted=ai.parse_json(ai.call(IMPORT_PROMPT+'\n已知名稱：'+json.dumps(refs,ensure_ascii=False)+'\n文字：'+ '\n'.join(unknown),images,json_mode=True))
             result['positions']=merge_positions(result['positions'],[position(x) for x in extracted.get('positions',[])])

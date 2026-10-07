@@ -155,7 +155,7 @@ def generate(day=None,scheduled=False):
             for k in ['headline','stance','lenses']:brief[k]=candidate[k]
             brief['radio']['points']=points;brief['aiGenerated']=True
         except Exception as e:brief['gaps'].append('AI 推演未完成：'+str(e));brief['aiGenerated']=False
-    else:brief['aiGenerated']=False;brief['gaps'].append('未設定 ANTHROPIC_API_KEY：大師每日推演與 AI 摘要待更新')
+    else:brief['aiGenerated']=False;brief['gaps'].append('未設定 AI API 金鑰：大師每日推演與 AI 摘要待更新')
     validate_brief(brief)
     path=DATA/'briefs'/f'{day}.json'
     try:atomic(path,brief)
