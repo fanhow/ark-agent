@@ -1,0 +1,176 @@
+{
+  "asOf": "2026-09-30",
+  "day": 339,
+  "totalPnl": -5024,
+  "note": "方舟講義第九節初始資料，尚未確認是否屬於本次使用者；沿用講義日期與數值，缺值待提供對帳單補齊。",
+  "rules": {
+    "p1": -15,
+    "p3": -8,
+    "p2": 5
+  },
+  "updatedAt": null,
+  "positions": [
+    {
+      "code": "00910",
+      "name": "第一金太空衛星",
+      "shares": null,
+      "ret": -22.73,
+      "pnl": -4422,
+      "value": null,
+      "note": ""
+    },
+    {
+      "code": "00988A",
+      "name": "主動統一全球創新",
+      "shares": null,
+      "ret": -27.05,
+      "pnl": -1006,
+      "value": null,
+      "note": ""
+    },
+    {
+      "code": "00941",
+      "name": "中信上游半導體",
+      "shares": null,
+      "ret": -6.48,
+      "pnl": null,
+      "value": null,
+      "note": ""
+    },
+    {
+      "code": "00911",
+      "name": "兆豐洲際半導體",
+      "shares": null,
+      "ret": -1.81,
+      "pnl": null,
+      "value": null,
+      "note": ""
+    },
+    {
+      "code": "00830",
+      "name": "國泰費城半導體",
+      "shares": null,
+      "ret": null,
+      "pnl": null,
+      "value": null,
+      "note": ""
+    },
+    {
+      "code": "00861",
+      "name": "元大全球未來通訊",
+      "shares": null,
+      "ret": null,
+      "pnl": null,
+      "value": null,
+      "note": ""
+    },
+    {
+      "code": "00876",
+      "name": "元大全球 5G",
+      "shares": null,
+      "ret": null,
+      "pnl": null,
+      "value": null,
+      "note": ""
+    },
+    {
+      "code": "00920",
+      "name": "富邦 ESG 綠色電力",
+      "shares": null,
+      "ret": null,
+      "pnl": null,
+      "value": null,
+      "note": ""
+    },
+    {
+      "code": "00960",
+      "name": "野村全球航運龍頭",
+      "shares": null,
+      "ret": null,
+      "pnl": null,
+      "value": null,
+      "note": ""
+    },
+    {
+      "code": "00875",
+      "name": "國泰網路資安",
+      "shares": null,
+      "ret": null,
+      "pnl": null,
+      "value": null,
+      "note": ""
+    },
+    {
+      "code": "0050",
+      "name": "元大台灣 50",
+      "shares": null,
+      "ret": null,
+      "pnl": null,
+      "value": null,
+      "note": ""
+    },
+    {
+      "code": "0052",
+      "name": "富邦科技",
+      "shares": null,
+      "ret": null,
+      "pnl": null,
+      "value": null,
+      "note": ""
+    },
+    {
+      "code": "0053",
+      "name": "元大電子",
+      "shares": null,
+      "ret": 3.64,
+      "pnl": null,
+      "value": null,
+      "note": ""
+    },
+    {
+      "code": "0055",
+      "name": "元大 MSCI 金融",
+      "shares": null,
+      "ret": null,
+      "pnl": null,
+      "value": null,
+      "note": ""
+    },
+    {
+      "code": "0056",
+      "name": "元大高股息",
+      "shares": null,
+      "ret": null,
+      "pnl": 0,
+      "value": null,
+      "note": "報酬率欄位空白待確認"
+    },
+    {
+      "code": "0057",
+      "name": "富邦摩台",
+      "shares": null,
+      "ret": null,
+      "pnl": null,
+      "value": null,
+      "note": ""
+    },
+    {
+      "code": "006203",
+      "name": "元大 MSCI 台灣",
+      "shares": null,
+      "ret": null,
+      "pnl": null,
+      "value": null,
+      "note": ""
+    },
+    {
+      "code": "006208",
+      "name": "富邦台 50",
+      "shares": null,
+      "ret": 4.07,
+      "pnl": null,
+      "value": null,
+      "note": ""
+    }
+  ]
+}

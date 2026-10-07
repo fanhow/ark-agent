@@ -1,0 +1,10 @@
+[
+{"id":"buffett","name":"華倫・巴菲特","short":"巴菲特","role":"波克夏・海瑟威","kind":"master","framework":"價值投資、安全邊際與護城河；利率是資產價格的重力","watch":"企業現金流、估值與安全邊際"},
+{"id":"marks","name":"霍華・馬克斯","short":"馬克斯","role":"橡樹資本","kind":"master","framework":"市場週期與鐘擺、第二層思考；不預測，為各種結果準備","watch":"市場情緒、信用風險與風險溢酬"},
+{"id":"dalio","name":"瑞・達利歐","short":"達利歐","role":"橋水創辦人","kind":"master","framework":"長短期債務週期與全天候配置；關注實質利率與政府債務","watch":"實質利率、資產相關性與債務"},
+{"id":"druckenmiller","name":"史坦利・卓肯米勒","short":"卓肯米勒","role":"杜肯家族辦公室","kind":"master","framework":"流動性與央行政策決定方向；看對集中、看錯快速認錯","watch":"流動性方向與政策轉折"},
+{"id":"wood","name":"凱西・伍德","short":"伍德","role":"ARK 方舟投資","kind":"master","framework":"顛覆式創新五年期視野與逢跌檢視創新股","watch":"創新企業成長、估值與資金成本"},
+{"id":"huang","name":"黃仁勳","short":"黃仁勳","role":"NVIDIA 執行長","kind":"ceo","framework":"AI 運算需求與多年期資料中心重建","watch":"運算需求、資料中心投資與供應能力"},
+{"id":"wei","name":"魏哲家","short":"魏哲家","role":"台積電董事長","kind":"ceo","framework":"先進製程與封裝供需、客戶訂單能見度、匯率與關稅","watch":"先進封裝產能、訂單與匯率"},
+{"id":"nadella","name":"薩蒂亞・納德拉","short":"納德拉","role":"Microsoft 執行長","kind":"ceo","framework":"雲端資本支出、企業採用率與投資回報","watch":"雲端採用、資本支出與投資回報"}
+]
