@@ -10,7 +10,7 @@ export function finalizeJournal(text,p){
 export function validateJournal(text,p,brief,day){
  const plain=text.replaceAll('**','');
  for(const line of journalWaterline(p).split('\n'))if(!plain.includes(line))throw new Error('AI 改寫了既有水位規則，未存入日誌，請重試。');
- const values=[1,2,3,day,p.asOf,p.totalPnl,...Object.values(p.rules),...p.positions.flatMap(x=>[x.code,x.shares,x.ret,x.pnl,x.value]),brief.date,...(brief.market||[]).flatMap(x=>[x.value,x.change,x.asOf])];
+ const values=[1,2,3,day,p.positions.length,...['P1','P2','P3','正常持有','待更新'].map(k=>p.positions.filter(x=>group(x,p.rules)===k).length),p.asOf,p.totalPnl,...Object.values(p.rules),...p.positions.flatMap(x=>[x.code,x.name,x.shares,x.ret,x.pnl,x.value]),brief.date,...(brief.market||[]).flatMap(x=>[x.label,x.value,x.change,x.asOf])];
  const numbers=s=>[...String(s??'').matchAll(/-?\d+(?:,\d{3})*(?:\.\d+)?/g)].map(x=>Math.abs(Number(x[0].replaceAll(',',''))));
  const allowed=new Set(values.flatMap(numbers));
  if(numbers(plain).some(n=>!allowed.has(n)))throw new Error('AI 含有來源未提供的數字，未存入日誌，請核對後重試。');
