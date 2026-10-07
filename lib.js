@@ -1,4 +1,20 @@
 export const group=(p,r)=>p.ret===null?'待更新':p.ret<=r.p1?'P1':p.ret<=r.p3?'P3':p.ret>=r.p2?'P2':'正常持有';
+export function journalWaterline(p){return ['P1','P2','P3'].map(k=>{const names=p.positions.filter(x=>group(x,p.rules)===k).map(x=>x.code+' '+x.name);return k+'：'+(names.length?'核對 '+names.join('、')+' 的資料與執行紀錄；':'目前已知報酬率中沒有此分組，先補齊缺值；')+'門檻依已設定 '+p.rules[k.toLowerCase()]+'%，不另設行情價位或交易指令。';}).join('\n');}
+export function finalizeJournal(text,p){
+ const water=journalWaterline(p);
+ const section=/^(?:\*\*)?水位行動清單[^\n]*\n[\s\S]*?(?=^(?:\*\*)?(?:船員點評|紀律提醒))/m;
+ if(section.test(text))return text.replace(section,'水位行動清單\n'+water+'\n\n');
+ if(text.replaceAll('**','').includes(water))return text;
+ throw new Error('複盤章節格式不完整，未存入日誌，請重試。');
+}
+export function validateJournal(text,p,brief,day){
+ const plain=text.replaceAll('**','');
+ for(const line of journalWaterline(p).split('\n'))if(!plain.includes(line))throw new Error('AI 改寫了既有水位規則，未存入日誌，請重試。');
+ const values=[1,2,3,day,p.asOf,p.totalPnl,...Object.values(p.rules),...p.positions.flatMap(x=>[x.code,x.shares,x.ret,x.pnl,x.value]),brief.date,...(brief.market||[]).flatMap(x=>[x.value,x.change,x.asOf])];
+ const numbers=s=>[...String(s??'').matchAll(/-?\d+(?:,\d{3})*(?:\.\d+)?/g)].map(x=>Math.abs(Number(x[0].replaceAll(',',''))));
+ const allowed=new Set(values.flatMap(numbers));
+ if(numbers(plain).some(n=>!allowed.has(n)))throw new Error('AI 含有來源未提供的數字，未存入日誌，請核對後重試。');
+}
 export const mergePositions=(old,rows)=>{const m=new Map(old.map(p=>[p.code,{...p}]));for(const p of rows){const q=m.get(p.code)||{};for(const [k,v] of Object.entries(p))if(v!==null&&v!=='')q[k]=v;m.set(p.code,m.has(p.code)?q:{...p});}return [...m.values()];};
 export const h=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 export const rich=s=>h(s).replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>');

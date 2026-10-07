@@ -1,4 +1,21 @@
 import test from 'node:test';import assert from 'node:assert/strict';import {group,ndjsonParser,sseParser,rich,safeURL,mergePositions,consumeSSE} from '../lib.js';
+import {journalWaterline,validateJournal,finalizeJournal} from '../lib.js';
+test('journal rejects invented price levels and changed waterline rules before saving',()=>{
+ const p={asOf:'2026-09-30',totalPnl:0,rules:{p1:-15,p3:-8,p2:5},positions:[{code:'0056',name:'測試',ret:null,pnl:0,shares:null,value:null}]};
+ const b={date:'2026-10-08',market:[{value:49806.37,change:-0.03,asOf:'2026-10-07'}]};
+ const valid='Day 339，損益 0。\n'+journalWaterline(p);
+ assert.doesNotThrow(()=>validateJournal(valid,p,b,339));
+ assert.throws(()=>validateJournal(valid+'\n支撐位約 49000 點。',p,b,339),/來源未提供/);
+ assert.throws(()=>validateJournal(valid+'\n利率警戒線 5.5%。',p,b,339),/來源未提供/);
+ assert.throws(()=>validateJournal(valid.replace('P1：','P1 更改：'),p,b,339),/水位規則/);
+ assert.match(journalWaterline(p),/先補齊缺值/);
+ const draft='已知損益 0。\n水位行動清單照規則，請執行：\nP2：觀察 49000 點。\n船員點評：依公開框架推演。\n紀律提醒：核對來源。';
+ const final=finalizeJournal(draft,p);
+ assert.ok(!final.includes('49000'));
+ assert.ok(final.includes(journalWaterline(p)));
+ assert.doesNotThrow(()=>validateJournal(final,p,b,339));
+ assert.throws(()=>finalizeJournal('缺少章節',p),/章節格式/);
+});
 test('ret percentage units and mutually exclusive groups',()=>assert.deepEqual([-22.73,-15,-8,0,5,null].map(ret=>group({ret},{p1:-15,p3:-8,p2:5})),['P1','P1','P3','正常持有','P2','待更新']));
 test('NDJSON survives arbitrary chunks and non-newline final object',()=>{const results=[];const parser=ndjsonParser(x=>results.push(x));const text='{"id":"buffett","reply":"繁體中文"}\n{"id":"wei","reply":"台積電"}';for(let i=0;i<text.length;i+=2)parser.push(text.slice(i,i+2));parser.end();assert.equal(results[0].reply,'繁體中文');assert.equal(results[1].id,'wei');});
 test('SSE survives every byte boundary incl CRLF',()=>{const results=[];const p=sseParser((e,o)=>results.push([e,o]));const t='event: delta\r\ndata: {"text":"你好"}\r\n\r\nevent: done\r\ndata: {}\r\n\r\n';for(const c of t)p.push(c);p.end();assert.deepEqual(results,[['delta',{text:'你好'}],['done',{}]]);});

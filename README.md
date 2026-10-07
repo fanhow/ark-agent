@@ -1,6 +1,8 @@
 # 方舟智慧體
 
-線上版：https://fanhow.github.io/ark-agent/
+啟用 AI 的正式網站：https://ark-agent.fanhow.chatgpt.site/
+
+公開盤勢／靜態備用網站：https://fanhow.github.io/ark-agent/
 
 GitHub Pages 版可直接使用，庫存、CSV 與照片儲存於各自瀏覽器的 IndexedDB，可下載／還原備份。本機版仍提供 Python 後端與 AI 代理。
 
@@ -27,7 +29,7 @@ AI 聊天、截圖／非標準文字辨識、每日人物推演與複盤使用�
 
 `.env` 僅由後端讀取，環境變數優先。只解析 AI 提供者、金鑰與模型設定，不執行 shell。既有 Anthropic 設定保留相容性，選用時設定 `AI_PROVIDER=anthropic`。
 
-OpenAI 使用 [Responses API](https://developers.openai.com/api/docs/guides/text)、圖片輸入與串流，設定 `store:false`；未完成或長度遭截斷的內容不會當作成功回覆。真實模型權限、額度與輸出品質須在金鑰建立後實測。
+OpenAI 使用 [Responses API](https://developers.openai.com/api/docs/guides/text)、圖片輸入與串流，設定 `store:false`；未完成或長度遭截斷的內容不會當作成功回覆。2026-10-08 已建立專用金鑰並接通 Sites 與 GitHub Actions；已驗證真實 API、正式網站聊天及雲端每日研究。每次使用仍取決於帳戶模型權限與 API 額度。
 
 ## 每日執行與排程
 
@@ -110,7 +112,7 @@ node --test tests/frontend.test.js
 node tests/browser.cjs
 ```
 
-測試使用暫存資料庫、暫時連接埠與明確標示的 AI 模擬回應；不更改正式庫存、不呼叫付費 API。**模擬串流測試通過不代表真實圖片辨識或 Anthropic 品質已驗收**。詳見 `ACCEPTANCE.md`。
+測試使用暫存資料庫、暫時連接埠與明確標示的 AI 模擬回應；不更改正式庫存、不呼叫付費 API。**模擬串流測試通過不代表真實圖片辨識或 AI 品質已驗收**。詳見 `ACCEPTANCE.md`。
 
 
 ## GitHub Pages 版
@@ -128,3 +130,11 @@ python3 scripts/build_pages.py
 `.github/workflows/pages.yml` 已設定 push／手動部署，以及台北時間週一至五 07:52 的日報更新。排程先查交易日，成功後保存公開歷史並重新部署。GitHub Actions 排程可能延遲，不保證準時啟動；[官方排程說明](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#schedule)。目前本機 Codex 排程繼續更新本機版，雲端工作更新線上版，兩者資料位置各自獨立。
 
 GitHub Pages 提供靜態託管，線上版目前沒有互動 AI 代理；聊天、截圖辨識與 AI 複盤會提示尚未啟用。可在 repository 的 Actions secret 設定 `OPENAI_API_KEY`，供雲端每日研究產生公開框架推演；這不會啟用使用者即時聊天。即時 AI 功能需另行部署有驗證與金鑰保護的後端，前端不可放金鑰。[GitHub Pages 官方說明](https://docs.github.com/en/pages/getting-started-with-github-pages/what-is-github-pages)。
+
+## ChatGPT Sites 版
+
+正式互動功能使用 https://ark-agent.fanhow.chatgpt.site/ ，以獲邀的 ChatGPT 帳號登入。Sites 後端保管金鑰，提供聊天、截圖辨識與 AI 複盤。GitHub Pages 保留公開市場資料與瀏覽器資料工具。
+
+兩個網域的瀏覽器資料獨立；用「下載備份／還原備份」轉移。Sites 同樣不把持股、個人照片或日誌寫回 GitHub。外部獲邀帳號可以使用網站；Sites 編輯者需為同一工作區的有效成員。
+
+AI 立場允許 `null`，不會硬改為中性。每日研究只送來源證據給 AI，拒絕將舊的待更新文字當作新分析。複盤固定沿用設定的水位分組，存檔前檢查新數字與水位清單；此檢查不能取代人工核對。
