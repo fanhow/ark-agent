@@ -1,6 +1,6 @@
 {
   "date": "2026-10-08",
-  "generatedAt": "2026-10-08T00:50:49+08:00",
+  "generatedAt": "2026-10-08T01:18:41+08:00",
   "headline": "已整理 8 項可取得的市場資料。先確認各項資料日期，再檢視風險與紀律。",
   "stance": {
     "score": null,
@@ -15,7 +15,7 @@
       "note": "前次可取得的已收盤資料；非即時行情",
       "asOf": "2026-10-07",
       "source": "https://www.twse.com.tw/rwd/zh/afterTrading/FMTQIK?date=20261008&response=json",
-      "fetchedAt": "2026-10-08T00:50:46+08:00",
+      "fetchedAt": "2026-10-08T01:18:41+08:00",
       "unit": "點"
     },
     {
@@ -26,7 +26,7 @@
       "note": "前次可取得的已收盤資料；非即時行情",
       "asOf": "2026-10-07",
       "source": "https://www.twse.com.tw/rwd/zh/afterTrading/STOCK_DAY?stockNo=2330&date=20261008&response=json",
-      "fetchedAt": "2026-10-08T00:50:46+08:00",
+      "fetchedAt": "2026-10-08T01:18:40+08:00",
       "unit": "元"
     },
     {
@@ -37,7 +37,7 @@
       "note": "Yahoo Finance 已收盤日 K；日期為美東交易日。資料延遲可能存在。",
       "asOf": "2026-10-06",
       "source": "https://query1.finance.yahoo.com/v8/finance/chart/%5EGSPC?interval=1d&range=1mo",
-      "fetchedAt": "2026-10-08T00:50:46+08:00",
+      "fetchedAt": "2026-10-08T01:18:39+08:00",
       "unit": "點"
     },
     {
@@ -48,7 +48,7 @@
       "note": "Yahoo Finance 已收盤日 K；日期為美東交易日。資料延遲可能存在。",
       "asOf": "2026-10-06",
       "source": "https://query1.finance.yahoo.com/v8/finance/chart/%5EIXIC?interval=1d&range=1mo",
-      "fetchedAt": "2026-10-08T00:50:46+08:00",
+      "fetchedAt": "2026-10-08T01:18:39+08:00",
       "unit": "點"
     },
     {
@@ -59,7 +59,7 @@
       "note": "官方序列最新可得觀測；變動為百分點，發布可能落後",
       "asOf": "2026-10-05",
       "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS10&cosd=2026-09-17&coed=2026-10-08",
-      "fetchedAt": "2026-10-08T00:50:46+08:00",
+      "fetchedAt": "2026-10-08T01:18:40+08:00",
       "unit": "%"
     },
     {
@@ -70,7 +70,7 @@
       "note": "紐約 Fed EFFR，非 FOMC 目標區間；前值變動待更新",
       "asOf": "2026-10-06",
       "source": "https://markets.newyorkfed.org/api/rates/unsecured/effr/last/10.json",
-      "fetchedAt": "2026-10-08T00:50:47+08:00",
+      "fetchedAt": "2026-10-08T01:18:40+08:00",
       "unit": "%"
     }
   ],
@@ -86,7 +86,7 @@
       "note": "官方排程；預期值、前值與實際值查不到／待更新。",
       "source": "https://www.bea.gov/news/schedule/ics/online-calendar-subscription.ics",
       "dataDate": "2026-10-08",
-      "fetchedAt": "2026-10-08T00:50:47+08:00"
+      "fetchedAt": "2026-10-08T01:18:39+08:00"
     },
     {
       "title": "Services Supplied Through Affiliates, 2024",
@@ -99,7 +99,7 @@
       "note": "官方排程；預期值、前值與實際值查不到／待更新。",
       "source": "https://www.bea.gov/news/schedule/ics/online-calendar-subscription.ics",
       "dataDate": "2026-10-08",
-      "fetchedAt": "2026-10-08T00:50:47+08:00"
+      "fetchedAt": "2026-10-08T01:18:39+08:00"
     },
     {
       "title": "Fed 已發布演說：Bowman, Modernizing the Regulatory and Supervisory Landscape",
@@ -112,7 +112,7 @@
       "note": "此時間是 RSS 公布時間，不是未來演說預告；非數據項目，預期值與前值不適用。",
       "source": "https://www.federalreserve.gov/newsevents/speech/bowman20261006a.htm",
       "dataDate": "2026-10-06",
-      "fetchedAt": "2026-10-08T00:50:49+08:00"
+      "fetchedAt": "2026-10-08T01:18:40+08:00"
     }
   ],
   "recap": [
@@ -129,7 +129,7 @@
     "url": "https://player.soundon.fm/p/049c00d3-d675-461e-9a11-522694633cdb/episodes/8976319f-a1c2-4b44-85c9-4c4bda75724b",
     "description": "市場最能滿足你的台美股系統「ARK 方舟運算」下載連結： https://onelink.to/zcd4s6 方舟官方 Line 帳號： https://line.me/R/ti/p/@708uxaza 任何系統使用上的問題歡迎至官方Line私訊提問 大俠個人的理財心得分享， 文字內容沒有對個股進行推薦。 以上資料為舉例說明，不代表未來實際績效。投資人因不同時間進場，將有不同之投資績效，過去之績效亦不代表未來績效之保證。 -- Hosting provided by SoundOn",
     "source": "https://feeds.soundon.fm/podcasts/049c00d3-d675-461e-9a11-522694633cdb.xml",
-    "fetchedAt": "2026-10-08T00:50:47+08:00"
+    "fetchedAt": "2026-10-08T01:18:40+08:00"
   },
   "board": {
     "status": "unavailable",
@@ -183,56 +183,56 @@
       "title": "台股加權",
       "url": "https://www.twse.com.tw/rwd/zh/afterTrading/FMTQIK?date=20261008&response=json",
       "dataDate": "2026-10-07",
-      "fetchedAt": "2026-10-08T00:50:46+08:00",
+      "fetchedAt": "2026-10-08T01:18:41+08:00",
       "status": "ok"
     },
     {
       "title": "台積電",
       "url": "https://www.twse.com.tw/rwd/zh/afterTrading/STOCK_DAY?stockNo=2330&date=20261008&response=json",
       "dataDate": "2026-10-07",
-      "fetchedAt": "2026-10-08T00:50:46+08:00",
+      "fetchedAt": "2026-10-08T01:18:40+08:00",
       "status": "ok"
     },
     {
       "title": "S&P 500",
       "url": "https://query1.finance.yahoo.com/v8/finance/chart/%5EGSPC?interval=1d&range=1mo",
       "dataDate": "2026-10-06",
-      "fetchedAt": "2026-10-08T00:50:46+08:00",
+      "fetchedAt": "2026-10-08T01:18:39+08:00",
       "status": "ok"
     },
     {
       "title": "那斯達克",
       "url": "https://query1.finance.yahoo.com/v8/finance/chart/%5EIXIC?interval=1d&range=1mo",
       "dataDate": "2026-10-06",
-      "fetchedAt": "2026-10-08T00:50:46+08:00",
+      "fetchedAt": "2026-10-08T01:18:39+08:00",
       "status": "ok"
     },
     {
       "title": "美國 10 年債殖利率",
       "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS10&cosd=2026-09-17&coed=2026-10-08",
       "dataDate": "2026-10-05",
-      "fetchedAt": "2026-10-08T00:50:46+08:00",
+      "fetchedAt": "2026-10-08T01:18:40+08:00",
       "status": "ok"
     },
     {
       "title": "聯邦基金有效利率",
       "url": "https://markets.newyorkfed.org/api/rates/unsecured/effr/last/10.json",
       "dataDate": "2026-10-06",
-      "fetchedAt": "2026-10-08T00:50:47+08:00",
+      "fetchedAt": "2026-10-08T01:18:40+08:00",
       "status": "ok"
     },
     {
       "title": "道瓊",
       "url": "https://query1.finance.yahoo.com/v8/finance/chart/%5EDJI?interval=1d&range=1mo",
       "dataDate": "2026-10-06",
-      "fetchedAt": "2026-10-08T00:50:46+08:00",
+      "fetchedAt": "2026-10-08T01:18:39+08:00",
       "status": "ok"
     },
     {
       "title": "費城半導體",
       "url": "https://query1.finance.yahoo.com/v8/finance/chart/%5ESOX?interval=1d&range=1mo",
       "dataDate": "2026-10-06",
-      "fetchedAt": "2026-10-08T00:50:46+08:00",
+      "fetchedAt": "2026-10-08T01:18:39+08:00",
       "status": "ok"
     },
     {
@@ -240,14 +240,14 @@
       "url": "https://www.bea.gov/news/schedule/ics/online-calendar-subscription.ics",
       "status": "ok",
       "note": "本週擷取 2 筆；不表示所有總經事件皆已涵蓋",
-      "fetchedAt": "2026-10-08T00:50:47+08:00"
+      "fetchedAt": "2026-10-08T01:18:39+08:00"
     },
     {
       "title": "BLS 經濟行事曆",
       "url": "https://www.bls.gov/schedule/news_release/bls.ics",
       "status": "ok",
       "note": "本週擷取 0 筆；不表示所有總經事件皆已涵蓋",
-      "fetchedAt": "2026-10-08T00:50:48+08:00"
+      "fetchedAt": "2026-10-08T01:18:40+08:00"
     },
     {
       "title": "Fed 已發布演說",
@@ -255,7 +255,7 @@
       "dataDate": "2026-10-08",
       "status": "ok",
       "note": "本週 1 筆已核實紀錄",
-      "fetchedAt": "2026-10-08T00:50:49+08:00"
+      "fetchedAt": "2026-10-08T01:18:40+08:00"
     },
     {
       "title": "FOMC 會議日曆",
@@ -263,19 +263,19 @@
       "dataDate": "2026-10-08",
       "status": "ok",
       "note": "本週 0 筆已核實紀錄",
-      "fetchedAt": "2026-10-08T00:50:49+08:00"
+      "fetchedAt": "2026-10-08T01:18:40+08:00"
     },
     {
       "title": "證交所開休市日曆",
       "url": "https://www.twse.com.tw/rwd/zh/holidaySchedule/holidaySchedule?response=json&queryYear=115",
       "dataDate": "2026-10-08",
-      "fetchedAt": "2026-10-08T00:50:46+08:00"
+      "fetchedAt": "2026-10-08T01:18:39+08:00"
     },
     {
       "title": "方舟運算 RSS",
       "url": "https://feeds.soundon.fm/podcasts/049c00d3-d675-461e-9a11-522694633cdb.xml",
       "dataDate": "2026-09-12",
-      "fetchedAt": "2026-10-08T00:50:47+08:00"
+      "fetchedAt": "2026-10-08T01:18:40+08:00"
     }
   ],
   "calendar": {
@@ -284,7 +284,7 @@
     "status": "verified",
     "note": "官方年度日曆列為交易日；臨時停市仍以證交所公告為準",
     "source": "https://www.twse.com.tw/rwd/zh/holidaySchedule/holidaySchedule?response=json&queryYear=115",
-    "fetchedAt": "2026-10-08T00:50:46+08:00"
+    "fetchedAt": "2026-10-08T01:18:39+08:00"
   },
   "status": "partial",
   "note": "真實來源擷取完成，但總經覆蓋尚未齊全。所有金額與漲跌僅代表標示日期，利率用中性色。",
