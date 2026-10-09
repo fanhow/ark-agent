@@ -64,7 +64,7 @@ def pull_cloud(key,cloud,expected_hash=None):
     elif not isinstance(value,dict) or value.get('date')!=key.split(':')[1]:raise SyncError('雲端資料日期無效')
     with LOCK:
         previous=read(path)
-        if (digest(previous) if previous is not None else None)!=expected_hash:raise SyncError('同步期間本機資料已修改；保留本機內容，稍後重新比對。')
+        if (digest(validate_portfolio(previous) if key=='portfolio' else previous) if previous is not None else None)!=expected_hash:raise SyncError('同步期間本機資料已修改；保留本機內容，稍後重新比對。')
         if previous is not None:atomic(DATA/'history'/('sync-'+str(uuid.uuid4())+'.json'),previous)
         atomic(path,value)
     return value
