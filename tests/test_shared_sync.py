@@ -45,3 +45,12 @@ class SyncTests(unittest.TestCase):
   self.assertEqual(sync.sync_once(self.transport)['status'],'synced');self.assertEqual(json.loads(self.portfolio.read_text())['cumulativePnl'],999)
   current=json.loads(self.portfolio.read_text());current['cumulativePnl']=123;self.portfolio.write_text(json.dumps(current));self.cloud.update(revision=3,value={**self.cloud['value'],'cumulativePnl':456},requestId='third-writer')
   self.assertEqual(sync.sync_once(self.transport)['status'],'error');self.assertEqual(json.loads(self.portfolio.read_text())['cumulativePnl'],123);self.assertEqual(self.cloud['value']['cumulativePnl'],456)
+
+ def test_pull_rechecks_local_edit_during_network_read(self):
+  sync.sync_once(self.transport)
+  self.cloud.update(revision=2,value={**self.cloud['value'],'cumulativePnl':999},requestId='other-writer')
+  def racing_transport(key,body=None):
+   if key=='portfolio' and body is None:self.portfolio.write_text(json.dumps({**SAMPLE,'cumulativePnl':777}))
+   return self.transport(key,body)
+  self.assertEqual(sync.sync_once(racing_transport)['status'],'error')
+  self.assertEqual(json.loads(self.portfolio.read_text())['cumulativePnl'],777)

@@ -75,7 +75,11 @@ class Handler(BaseHTTPRequestHandler):
                     except (BrokenPipeError,ConnectionResetError):return
                     except Exception as e:self.event('error',{'error':str(e)})
                 else:self.respond({'text':result})
-            elif path=='/api/portfolio' and method=='PUT':self.respond(save_portfolio(b))
+            elif path=='/api/portfolio' and method=='PUT':
+                with LOCK:
+                    current=read(DATA/'portfolio.json')
+                    if b.get('updatedAt')!=current.get('updatedAt'):self.respond({'error':'庫存已在別處變更，請重新載入後核對，未覆寫'},409);return
+                    self.respond(save_portfolio(b))
             elif path.startswith('/api/journal/') and method=='PUT':
                 d=valid_date(path.rsplit('/',1)[1]);text=b.get('text')
                 if not isinstance(text,str) or not text.strip() or len(text)>100000:raise ValueError('日誌文字無效')

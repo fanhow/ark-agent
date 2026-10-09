@@ -2,7 +2,7 @@
 from __future__ import annotations
 import fcntl, hashlib, json, os, threading, urllib.request, urllib.error, uuid
 from urllib.parse import urlencode
-from core import DATA, ROOT, atomic, read, now, validate_portfolio
+from core import DATA, ROOT, atomic, read, now, validate_portfolio, LOCK
 import ai
 STATE=DATA/'shared-sync.json'
 ALLOWED_SITE='https://ark-agent.fanhow.chatgpt.site'
@@ -58,12 +58,16 @@ def local_path(key):
     if not re.fullmatch(r'(brief|journal):\d{4}-\d{2}-\d{2}',key):raise SyncError('雲端資料識別無效')
     kind,date=key.split(':');return DATA/('briefs' if kind=='brief' else 'journal')/(date+'.json')
 
-def pull_cloud(key,cloud):
+def pull_cloud(key,cloud,expected_hash=None):
     path=local_path(key);value=cloud['value']
     if key=='portfolio':value=validate_portfolio(value)
     elif not isinstance(value,dict) or value.get('date')!=key.split(':')[1]:raise SyncError('雲端資料日期無效')
-    if path.exists():atomic(DATA/'history'/('sync-'+str(uuid.uuid4())+'.json'),read(path))
-    atomic(path,value);return value
+    with LOCK:
+        previous=read(path)
+        if (digest(previous) if previous is not None else None)!=expected_hash:raise SyncError('同步期間本機資料已修改；保留本機內容，稍後重新比對。')
+        if previous is not None:atomic(DATA/'history'/('sync-'+str(uuid.uuid4())+'.json'),previous)
+        atomic(path,value)
+    return value
 
 def sync_once(transport=None):
     config=settings()
@@ -85,7 +89,7 @@ def sync_once(transport=None):
                     cloud=send(key);pending=entry.get('pending')
                     if not pending and cloud.get('value') is not None and (value is None or (entry.get('hash')==target and cloud['revision']>entry.get('revision',0))):
                         # Pull only when there are no unpublished local edits.
-                        value=pull_cloud(key,cloud);entry.update(hash=digest(value),revision=cloud['revision']);entry.pop('error',None);state['lastSuccessAt']=now();changed+=1;atomic(STATE,state);continue
+                        value=pull_cloud(key,cloud,target);entry.update(hash=digest(value),revision=cloud['revision']);entry.pop('error',None);state['lastSuccessAt']=now();changed+=1;atomic(STATE,state);continue
                     if pending:
                         # Recover a lost success response before sending a newer local version.
                         if cloud.get('requestId')==pending['requestId'] and digest(cloud['value'])==digest(pending['value']):
