@@ -33,7 +33,7 @@ jobs:
       - name: Verify data and stream contracts
         run: |
           python -m unittest discover -s tests -p 'test_*.py'
-          node --test tests/frontend.test.js tests/storage.test.js
+          node --test tests/*.test.js
       - name: Update public daily brief on trading days
         if: github.event_name == 'schedule' || inputs.refresh_brief == true
         env:

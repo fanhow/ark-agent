@@ -10,6 +10,7 @@ TZ = ZoneInfo('Asia/Taipei')
 LOCK = threading.RLock()
 IDS = ['buffett','marks','dalio','druckenmiller','wood','huang','wei','nadella']
 FIELDS = ['code','name','shares','ret','pnl','value','note']
+ACCOUNT_FIELDS = ['dailyPnl', 'dailyPnlPercent', 'cumulativePnl', 'cumulativePnlPercent', 'stockMarketValue', 'stockCost', 'totalAssets', 'totalAssetsChange', 'totalAssetsChangePercent']
 
 def now(): return datetime.now(TZ).isoformat(timespec='seconds')
 def today(): return datetime.now(TZ).date().isoformat()
@@ -60,8 +61,27 @@ def merge_positions(old,new):
                 if v is not None and v!='': merged[p['code']][k]=v
     return list(merged.values())
 
+def merge_account(target, source):
+    for k in ACCOUNT_FIELDS:
+        v=source.get(k)
+        if v is None: continue
+        number(v,k)
+        if target.get(k) is not None and target[k]!=v: raise ValueError('多張資料的 '+k+' 不同，請分開核對更新')
+        target[k]=v
+
+def validate_snapshot(s):
+    if s is None: return None
+    if not isinstance(s,dict) or not isinstance(s.get('values'),dict): raise ValueError('帳戶快照格式錯誤')
+    valid_date(s.get('asOf'))
+    if not isinstance(s.get('recordedAt'),str): raise ValueError('快照記錄時間無效')
+    datetime.fromisoformat(s['recordedAt'])
+    values={k:number(s['values'].get(k),k) for k in ACCOUNT_FIELDS}
+    if any(values[k] is not None and values[k]<0 for k in ['stockMarketValue','stockCost','totalAssets']): raise ValueError('資產與成本不可為負')
+    return {'asOf':s['asOf'],'recordedAt':s['recordedAt'],'source':str(s.get('source') or '使用者核對')[:200],'values':values}
+
 def validate_portfolio(p):
     out={'asOf':valid_date(p.get('asOf'),True),'day':p.get('day'),'totalPnl':number(p.get('totalPnl')),'cumulativePnl':number(p.get('cumulativePnl')),'cumulativePnlNote':str(p.get('cumulativePnlNote') or ''),'note':str(p.get('note') or ''),'rules':p.get('rules'),'updatedAt':p.get('updatedAt'),'positions':[]}
+    if 'accountSnapshot' in p: out['accountSnapshot']=validate_snapshot(p['accountSnapshot'])
     if isinstance(out['day'],bool) or not isinstance(out['day'],int) or out['day']<0: raise ValueError('Day 必須是非負整數')
     r=out['rules']
     if not isinstance(r,dict) or any(k not in r or number(r[k]) is None for k in ['p1','p3','p2']): raise ValueError('水位規則不完整')
@@ -89,7 +109,7 @@ def commit_import(current, incoming, mode, older=None):
     if not d: raise ValueError('請確認資料日期後再更新')
     if current['asOf'] and d<current['asOf'] and older!='accept': raise ValueError('日期較舊：須在預覽明確選擇接受，否則保留目前資料與 Day')
     ps=[position(x) for x in incoming.get('positions',[])]
-    if not ps and incoming.get('cumulativePnl') is None: raise ValueError('沒有可更新的持股或累積損益')
+    if not ps and not any(incoming.get(k) is not None for k in ACCOUNT_FIELDS): raise ValueError('沒有可更新的持股或累積損益')
     if not ps and mode=='replace': raise ValueError('只有摘要金額時請選擇局部更新，保留持股')
     out=dict(current)
     out['positions']=merge_positions(current['positions'],ps) if mode=='merge' else merge_positions([],ps)
@@ -101,10 +121,14 @@ def commit_import(current, incoming, mode, older=None):
         out['cumulativePnlNote']='使用者核對截圖／對帳單，資料日期 '+d
     elif current.get('cumulativePnl') is not None:
         out['cumulativePnlNote']='本次未提供；沿用上次金額，待核對。'+str(current.get('cumulativePnlNote') or '')[:200]
+    if any(incoming.get(k) is not None for k in ACCOUNT_FIELDS):
+        out['accountSnapshot']={'asOf':d,'recordedAt':now(),'source':'照片／對帳單核對','values':{k:number(incoming.get(k),k) for k in ACCOUNT_FIELDS}}
+        out['cumulativePnl']=out['accountSnapshot']['values']['cumulativePnl']
+        out['cumulativePnlNote']='帳戶摘要依本次核對資料；未提供的摘要欄位留空。'
     out['note']='使用者已確認匯入；'+str(incoming.get('note') or '')
     if mode=='merge' and out['totalPnl'] is None:
         out['totalPnl']=current['totalPnl']
-        out['note']+=f'；總損益沿用 {current["asOf"]}，未由部分持股補算，待核對。'
+        # Legacy statement total is retained for compatibility; the UI sums positions separately.
     if current['asOf'] and d<current['asOf']: out['note']+='；明確接受較舊日期，保留 Day 不遞增。'
     return validate_portfolio(out)
 
@@ -113,6 +137,7 @@ ALIASES={
  'shares':['shares','股數','庫存股數','持有數量','數量'], 'ret':['ret','報酬率','報酬率(%)','報酬率％','報酬率%','損益率','損益率(%)'],
  'pnl':['pnl','損益','未實現損益','預估損益'], 'value':['value','市值','現值','參考市值'],
  'asOf':['asOf','日期','資料日期','對帳日期'], 'totalPnl':['totalPnl','總損益','總未實現損益'], 'cumulativePnl':['cumulativePnl','累積損益','累積損益(台幣)','累積損益（台幣）'], 'note':['note','備註']}
+ALIASES.update({k:ALIASES.get(k,[])+[k,label,label.replace('（','(').replace('）',')')] for k,label in [('dailyPnl', '今日損益（台幣）'), ('dailyPnlPercent', '今日損益率（%）'), ('cumulativePnl', '累積損益（台幣）'), ('cumulativePnlPercent', '累積損益率（%）'), ('stockMarketValue', '股票市值（台幣）'), ('stockCost', '成本（台幣）'), ('totalAssets', '總資產（台幣）'), ('totalAssetsChange', '總資產變動（台幣）'), ('totalAssetsChangePercent', '總資產變動率（%）')]})
 def parse_num(s):
     s=str(s or '').strip().replace(',','').replace('，','').replace('%','').replace('％','').replace('−','-')
     if s in ['', '-', '--', 'N/A', 'null','待更新']: return None
@@ -144,7 +169,7 @@ def parse_csv(text):
             if out['asOf'] and out['asOf']!=d: raise ValueError('同一檔案含不同日期，請拆開匯入')
             out['asOf']=d
         if vals.get('totalPnl','').strip(): out['totalPnl']=parse_num(vals['totalPnl'])
-        if vals.get('cumulativePnl','').strip(): out['cumulativePnl']=parse_num(vals['cumulativePnl'])
+        merge_account(out,{k:parse_num(vals.get(k,'')) for k in ACCOUNT_FIELDS})
         code=vals['code'].strip().strip("'\"")
         if not code: continue
         if code in ['合計','總計','TOTAL']:
