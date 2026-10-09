@@ -10,7 +10,7 @@ def load_env():
         line=line.strip()
         if not line or line.startswith('#') or '=' not in line:continue
         key,value=line.split('=',1);key=key.strip();value=value.strip()
-        if key not in ['AI_PROVIDER','OPENAI_API_KEY','OPENAI_MODEL','ANTHROPIC_API_KEY','ANTHROPIC_MODEL']:continue
+        if key not in ['AI_PROVIDER','OPENAI_API_KEY','OPENAI_MODEL','OPENAI_VISION_MODEL','ANTHROPIC_API_KEY','ANTHROPIC_MODEL']:continue
         if len(value)>=2 and value[0]==value[-1] and value[0] in [chr(34),chr(39)]:value=value[1:-1]
         os.environ.setdefault(key,value)
 load_env()
@@ -44,8 +44,8 @@ def call(prompt,images=None,stream=False,json_mode=False):
     content.append({'type':'text','text':prompt})
     payload={'model':model(),'max_tokens':8000,'system':SYSTEM+('\n只輸出有效 JSON，不要 Markdown 圍欄。' if json_mode else ''),'messages':[{'role':'user','content':content}],'stream':stream}
     if provider()=='openai':
-        content=[{'type':'input_text','text':prompt}]+[{'type':'input_image','image_url':'data:'+img['media_type']+';base64,'+img['data']} for img in images or []]
-        payload={'model':model(),'max_output_tokens':8000,'instructions':SYSTEM+('\n只輸出有效 JSON，不要 Markdown 圍欄。' if json_mode else ''),'input':[{'role':'user','content':content}],'stream':stream,'store':False}
+        content=[{'type':'input_text','text':prompt}]+[{'type':'input_image','detail':'high','image_url':'data:'+img['media_type']+';base64,'+img['data']} for img in images or []]
+        payload={'model':os.environ.get('OPENAI_VISION_MODEL','gpt-4.1') if images and json_mode else model(),'max_output_tokens':8000,'instructions':SYSTEM+('\n只輸出有效 JSON，不要 Markdown 圍欄。' if json_mode else ''),'input':[{'role':'user','content':content}],'stream':stream,'store':False}
         if json_mode:payload['text']={'format':{'type':'json_object'}}
         req=urllib.request.Request('https://api.openai.com/v1/responses',data=json.dumps(payload).encode(),headers={'Content-Type':'application/json','Authorization':'Bearer '+os.environ['OPENAI_API_KEY']})
     else:

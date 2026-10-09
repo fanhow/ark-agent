@@ -12,6 +12,9 @@ a=p.parse_args()
 try:
  result=generate(a.date,a.scheduled)
  if 'headline' in result:
+  from shared_sync import sync_once
+  sync_result=sync_once()
+  if sync_result.get('status')=='error':print(json.dumps({'sharedSync':sync_result},ensure_ascii=False))
   print(json.dumps({'status':result['status'],'date':result['date'],'headline':result['headline'],'aiGenerated':result['aiGenerated'],'path':str(DATA/'briefs'/f'{result["date"]}.json'),'gaps':result['gaps']},ensure_ascii=False,indent=2))
   if a.notify and sys.platform=='darwin':
    message=result['headline']+' 完整資料與大師視角狀態已更新到方舟智慧體網頁。'

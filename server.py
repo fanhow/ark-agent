@@ -6,11 +6,12 @@ from pathlib import Path
 from urllib.parse import urlparse, parse_qs, unquote
 from core import *
 import ai
+import shared_sync
 TOKEN=secrets.token_urlsafe(32)
 MAX_BODY=30*1024*1024
 IMPORT_PROMPT='''擷取對帳單每檔持股，同代號合併，後來非空欄位補上。只回有效 JSON：
-{"asOf":null,"totalPnl":null,"note":"缺值原因及資料來源","positions":[{"code":"代號","name":"名稱","shares":null,"ret":null,"pnl":null,"value":null,"note":"缺值或計算來源"}]}。
-看不清或沒有填 null，不猜不推算；唯一例外：成本與現值皆明確且成本非 0 時可算 (現值/成本-1)*100，必須在 note 保留成本、現值與公式。ret 數值 -22.73 代表 -22.73%。總損益只取明列的總額，不由部分持股加總。保持代號的前導 0。不同日期不得合併為同一期，請於 note 說明。已知名稱僅供參考，不可當作持有證據。'''
+{"asOf":null,"dailyPnl":null,"totalPnl":null,"totalPnlLabel":null,"cumulativePnl":null,"cumulativePnlLabel":null,"note":"缺值原因及資料來源","positions":[{"code":"代號","name":"名稱","shares":null,"ret":null,"pnl":null,"value":null,"note":"缺值或計算來源"}]}。
+看不清或沒有填 null，不猜不推算；唯一例外：成本與現值皆明確且成本非 0 時可算 (現值/成本-1)*100，必須在 note 保留成本、現值與公式。ret 數值 -22.73 代表 -22.73%。totalPnl 只取明列的總未實現損益；cumulativePnl 只取明列「累積損益（台幣）」金額，不能填報酬率、今日損益或個股損益，不由部分持股加總。截圖裁切的個股列若無完整代號則略過並註記；日期未顯示填 null。成本／持有股數同欄上下兩行時，上行為成本台幣，下行才是股數。shares 絕不能填成本金額；逗號是千位符號（如 1,586 為 1586 股），小數点保留（如 1.23 股）。直接抄錄畫面明列報酬率，不要重新計算。只有成本單位及總額可明確確認才允許計算，不要將成本總額再乘股數。dailyPnl 僅取今日損益。totalPnlLabel 與 cumulativePnlLabel 必須逐字抄下對應總額的原始欄名。畫面若只有今日損益、累積損益、股票市值，totalPnl 與 totalPnlLabel 必須為 null。不要將今日損益填入 totalPnl。逐字核對小數最後一位。保持代號的前導 0。不同日期不得合併為同一期，請於 note 說明。已知名稱僅供參考，不可當作持有證據。'''
 
 def jpeg_size(b):
     if not b.startswith(b'\xff\xd8'):raise ValueError('頭像必須是 JPEG')
@@ -130,7 +131,7 @@ class Handler(BaseHTTPRequestHandler):
             print(type(e).__name__,str(e),flush=True);self.respond({'error':'作業未完成：'+type(e).__name__},500)
     def event(self,name,obj):self.wfile.write(('event: '+name+'\ndata: '+json.dumps(obj,ensure_ascii=False)+'\n\n').encode());self.wfile.flush()
     def preview(self,b):
-        result={'asOf':None,'totalPnl':None,'positions':[],'note':''};parts=[];images=[]
+        result={'asOf':None,'totalPnl':None,'cumulativePnl':None,'positions':[],'note':''};parts=[];images=[]
         files=b.get('files',[])
         if not isinstance(files,list) or len(files)>30:raise ValueError('一次最多 30 個檔案')
         for id in dict.fromkeys(files):
@@ -148,6 +149,7 @@ class Handler(BaseHTTPRequestHandler):
             result['positions']=merge_positions(result['positions'],parsed['positions'])
             if parsed['asOf']:dates.append(parsed['asOf']);result['asOf']=parsed['asOf']
             if parsed['totalPnl'] is not None:result['totalPnl']=parsed['totalPnl']
+            if parsed.get('cumulativePnl') is not None:result['cumulativePnl']=parsed['cumulativePnl']
             result['note']+=name+'：'+parsed['note']+'；'
         if images or unknown:
             if not ai.configured():raise ValueError('未設定 AI 金鑰：截圖與非標準文字需 OPENAI_API_KEY；標準 CSV 可直接辨識')
@@ -155,14 +157,16 @@ class Handler(BaseHTTPRequestHandler):
             extracted=ai.parse_json(ai.call(IMPORT_PROMPT+'\n已知名稱：'+json.dumps(refs,ensure_ascii=False)+'\n文字：'+ '\n'.join(unknown),images,json_mode=True))
             result['positions']=merge_positions(result['positions'],[position(x) for x in extracted.get('positions',[])])
             if extracted.get('asOf'):dates.append(valid_date(extracted['asOf']));result['asOf']=extracted['asOf']
-            if extracted.get('totalPnl') is not None:result['totalPnl']=number(extracted['totalPnl'])
+            if extracted.get('totalPnl') is not None and '未實現' in str(extracted.get('totalPnlLabel') or '') and '今日' not in str(extracted.get('totalPnlLabel') or ''):result['totalPnl']=number(extracted['totalPnl'])
+            if extracted.get('cumulativePnl') is not None:result['cumulativePnl']=number(extracted['cumulativePnl'])
             result['note']+=str(extracted.get('note') or '')
         if len(set(dates))>1:raise ValueError('批次含不同資料日期，請依日期拆開匯入')
-        if not result['positions']:raise ValueError('未辨識出持股，請提供含代號欄位的 CSV 或設定 AI 金鑰')
+        if not result['positions'] and result['cumulativePnl'] is None:raise ValueError('未辨識出持股，請提供含代號欄位的 CSV 或設定 AI 金鑰')
         if result['asOf'] is None:result['note']+='資料日期未提供，請於預覽確認。'
         if result['totalPnl'] is None:result['note']+='總損益未提供；不由部分持股加總。'
         return result
     def get(self,path,q):
+        if path=='/api/shared/status':self.respond(shared_sync.public_status());return
         if path=='/api/status':self.respond({'aiConfigured':ai.configured(),'model':ai.model(),'csrfToken':TOKEN,'timezone':'Asia/Taipei','today':today(),'lastRun':read(DATA/'last-run.json'),'schedule':read(DATA/'schedule.json')});return
         if path=='/api/portfolio':self.respond(read(DATA/'portfolio.json'));return
         if path=='/api/portfolio/previous':
@@ -194,6 +198,7 @@ if __name__=='__main__':
     os.chmod(DATA,0o700)
     if not (DATA/'portfolio.json').exists():atomic(DATA/'portfolio.json',read(ROOT/'data/portfolio.initial.json'))
     server=ThreadingHTTPServer(('127.0.0.1',a.port),Handler)
+    shared_sync.start_background()
     print(f'方舟智慧體 http://127.0.0.1:{a.port} · AI {"已設定" if ai.configured() else "未設定金鑰"}',flush=True)
     try:server.serve_forever()
     except KeyboardInterrupt:server.server_close()

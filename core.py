@@ -61,7 +61,7 @@ def merge_positions(old,new):
     return list(merged.values())
 
 def validate_portfolio(p):
-    out={'asOf':valid_date(p.get('asOf'),True),'day':p.get('day'),'totalPnl':number(p.get('totalPnl')),'note':str(p.get('note') or ''),'rules':p.get('rules'),'updatedAt':p.get('updatedAt'),'positions':[]}
+    out={'asOf':valid_date(p.get('asOf'),True),'day':p.get('day'),'totalPnl':number(p.get('totalPnl')),'cumulativePnl':number(p.get('cumulativePnl')),'cumulativePnlNote':str(p.get('cumulativePnlNote') or ''),'note':str(p.get('note') or ''),'rules':p.get('rules'),'updatedAt':p.get('updatedAt'),'positions':[]}
     if isinstance(out['day'],bool) or not isinstance(out['day'],int) or out['day']<0: raise ValueError('Day 必須是非負整數')
     r=out['rules']
     if not isinstance(r,dict) or any(k not in r or number(r[k]) is None for k in ['p1','p3','p2']): raise ValueError('水位規則不完整')
@@ -89,12 +89,18 @@ def commit_import(current, incoming, mode, older=None):
     if not d: raise ValueError('請確認資料日期後再更新')
     if current['asOf'] and d<current['asOf'] and older!='accept': raise ValueError('日期較舊：須在預覽明確選擇接受，否則保留目前資料與 Day')
     ps=[position(x) for x in incoming.get('positions',[])]
-    if not ps: raise ValueError('沒有可更新的持股')
+    if not ps and incoming.get('cumulativePnl') is None: raise ValueError('沒有可更新的持股或累積損益')
+    if not ps and mode=='replace': raise ValueError('只有摘要金額時請選擇局部更新，保留持股')
     out=dict(current)
     out['positions']=merge_positions(current['positions'],ps) if mode=='merge' else merge_positions([],ps)
     out['asOf']=d
     out['day']=current['day']+(1 if current['asOf'] and d>current['asOf'] else 0)
     out['totalPnl']=number(incoming.get('totalPnl'))
+    if incoming.get('cumulativePnl') is not None:
+        out['cumulativePnl']=number(incoming['cumulativePnl'])
+        out['cumulativePnlNote']='使用者核對截圖／對帳單，資料日期 '+d
+    elif current.get('cumulativePnl') is not None:
+        out['cumulativePnlNote']='本次未提供；沿用上次金額，待核對。'+str(current.get('cumulativePnlNote') or '')[:200]
     out['note']='使用者已確認匯入；'+str(incoming.get('note') or '')
     if mode=='merge' and out['totalPnl'] is None:
         out['totalPnl']=current['totalPnl']
@@ -106,7 +112,7 @@ ALIASES={
  'code':['code','代號','股票代號','證券代號','商品代號'], 'name':['name','名稱','股票名稱','證券名稱','商品名稱'],
  'shares':['shares','股數','庫存股數','持有數量','數量'], 'ret':['ret','報酬率','報酬率(%)','報酬率％','報酬率%','損益率','損益率(%)'],
  'pnl':['pnl','損益','未實現損益','預估損益'], 'value':['value','市值','現值','參考市值'],
- 'asOf':['asOf','日期','資料日期','對帳日期'], 'totalPnl':['totalPnl','總損益','總未實現損益'], 'note':['note','備註']}
+ 'asOf':['asOf','日期','資料日期','對帳日期'], 'totalPnl':['totalPnl','總損益','總未實現損益'], 'cumulativePnl':['cumulativePnl','累積損益','累積損益(台幣)','累積損益（台幣）'], 'note':['note','備註']}
 def parse_num(s):
     s=str(s or '').strip().replace(',','').replace('，','').replace('%','').replace('％','').replace('−','-')
     if s in ['', '-', '--', 'N/A', 'null','待更新']: return None
@@ -120,13 +126,13 @@ def decode_text(b):
     raise ValueError('無法以 UTF-8 或 Big5 解碼，請另存 CSV UTF-8')
 def parse_csv(text):
     lines=text.strip().splitlines()
-    if not lines: return {'asOf':None,'totalPnl':None,'positions':[],'note':'無文字資料'}
+    if not lines: return {'asOf':None,'totalPnl':None,'cumulativePnl':None,'positions':[],'note':'無文字資料'}
     header=next((i for i,l in enumerate(lines) if any(a in l for a in ALIASES['code'])),None)
-    if header is None: return {'asOf':None,'totalPnl':None,'positions':[],'note':'未找到標準代號欄，需使用 AI 辨識或手動編輯'}
+    if header is None: return {'asOf':None,'totalPnl':None,'cumulativePnl':None,'positions':[],'note':'未找到標準代號欄，需使用 AI 辨識或手動編輯'}
     part='\n'.join(lines[header:]); delim='\t' if '\t' in lines[header] else ','
     rows=csv.DictReader(io.StringIO(part),delimiter=delim)
     mapping={k:next((h for h in (rows.fieldnames or []) if h.strip().lstrip('\ufeff') in a),None) for k,a in ALIASES.items()}
-    out={'asOf':None,'totalPnl':None,'positions':[],'note':'標準欄位直接擷取；未推算缺值。ret 採百分比數值。'}
+    out={'asOf':None,'totalPnl':None,'cumulativePnl':None,'positions':[],'note':'標準欄位直接擷取；未推算缺值。ret 採百分比數值。'}
     for i,row in enumerate(rows,header+2):
         vals={k:row.get(h,'') if h else '' for k,h in mapping.items()}
         d=vals.get('asOf','').strip()
@@ -138,6 +144,7 @@ def parse_csv(text):
             if out['asOf'] and out['asOf']!=d: raise ValueError('同一檔案含不同日期，請拆開匯入')
             out['asOf']=d
         if vals.get('totalPnl','').strip(): out['totalPnl']=parse_num(vals['totalPnl'])
+        if vals.get('cumulativePnl','').strip(): out['cumulativePnl']=parse_num(vals['cumulativePnl'])
         code=vals['code'].strip().strip("'\"")
         if not code: continue
         if code in ['合計','總計','TOTAL']:
