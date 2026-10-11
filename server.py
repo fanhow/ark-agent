@@ -176,6 +176,7 @@ class Handler(BaseHTTPRequestHandler):
     def get(self,path,q):
         if path=='/api/shared/status':self.respond(shared_sync.public_status());return
         if path=='/api/status':self.respond({'aiConfigured':ai.configured(),'model':ai.model(),'csrfToken':TOKEN,'timezone':'Asia/Taipei','today':today(),'lastRun':read(DATA/'last-run.json'),'schedule':read(DATA/'schedule.json')});return
+        if path=='/api/fund':self.respond(read(DATA/'fund.json'));return
         if path=='/api/portfolio':self.respond(read(DATA/'portfolio.json'));return
         if path=='/api/portfolio/previous':
             current=read(DATA/'portfolio.json');files=sorted((DATA/'history').glob('[0-9]*.json'),reverse=True)
@@ -188,7 +189,7 @@ class Handler(BaseHTTPRequestHandler):
         if path.startswith('/api/briefs/'):
             d=valid_date(path.rsplit('/',1)[1]);obj=read(DATA/'briefs'/f'{d}.json');self.respond(obj if obj else {'error':'查不到／待更新'},200 if obj else 404);return
         if path=='/api/journal':self.respond([read(p) for p in sorted((DATA/'journal').glob('????-??-??.json'),reverse=True)]);return
-        allowed={'/':'index.html','/index.html':'index.html','/app.js':'app.js','/styles.css':'styles.css','/crew.json':'crew.json','/lib.js':'lib.js','/macro.js':'macro.js','/storage.js':'storage.js','/config.json':'config.json'}
+        allowed={'/':'index.html','/index.html':'index.html','/app.js':'app.js','/styles.css':'styles.css','/crew.json':'crew.json','/lib.js':'lib.js','/macro.js':'macro.js','/fund.js':'fund.js','/fund-model.js':'fund-model.js','/fund.css':'fund.css','/storage.js':'storage.js','/config.json':'config.json'}
         if path in allowed:p=ROOT/allowed[path]
         elif re.fullmatch(r'/assets/(buffett|marks|dalio|druckenmiller|wood|huang|wei|nadella)\.svg',path):p=ROOT/path[1:]
         elif re.fullmatch(r'/data/avatars/(buffett|marks|dalio|druckenmiller|wood|huang|wei|nadella)\.jpg',path):p=DATA/'avatars'/Path(path).name

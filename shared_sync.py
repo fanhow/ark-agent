@@ -3,6 +3,7 @@ from __future__ import annotations
 import fcntl, hashlib, json, os, threading, urllib.request, urllib.error, uuid
 from urllib.parse import urlencode
 from core import DATA, ROOT, atomic, read, now, validate_portfolio, LOCK
+from fund import validate_fund
 import ai
 STATE=DATA/'shared-sync.json'
 ALLOWED_SITE='https://ark-agent.fanhow.chatgpt.site'
@@ -49,18 +50,21 @@ def request(config,key,body=None):
 
 def documents():
     if (DATA/'portfolio.json').exists():yield 'portfolio',validate_portfolio(read(DATA/'portfolio.json'))
+    if (DATA/'fund.json').exists():yield 'fund:stable500',validate_fund(read(DATA/'fund.json'))
     for kind,folder in [('journal','journal'),('brief','briefs')]:
         for path in sorted((DATA/folder).glob('????-??-??.json')):yield kind+':'+path.stem,read(path)
 
 def local_path(key):
     import re
     if key=='portfolio':return DATA/'portfolio.json'
+    if key=='fund:stable500':return DATA/'fund.json'
     if not re.fullmatch(r'(brief|journal):\d{4}-\d{2}-\d{2}',key):raise SyncError('雲端資料識別無效')
     kind,date=key.split(':');return DATA/('briefs' if kind=='brief' else 'journal')/(date+'.json')
 
 def pull_cloud(key,cloud,expected_hash=None):
     path=local_path(key);value=cloud['value']
     if key=='portfolio':value=validate_portfolio(value)
+    elif key=='fund:stable500':value=validate_fund(value)
     elif not isinstance(value,dict) or value.get('date')!=key.split(':')[1]:raise SyncError('雲端資料日期無效')
     with LOCK:
         previous=read(path)
@@ -119,7 +123,7 @@ def public_status():
         for key,value in documents():
             if state.get('documents',{}).get(key,{}).get('hash')!=digest(value):pending+=1
     except Exception:pending+=1
-    return {'configured':True,'status':'pending' if pending and state.get('status')!='error' else state.get('status','pending'),'pending':pending,'lastSuccessAt':state.get('lastSuccessAt'),'errors':state.get('errors',[]),'siteUrl':ALLOWED_SITE,'portfolioUpdatedAt':read(DATA/'portfolio.json',{}).get('updatedAt')}
+    return {'configured':True,'status':'pending' if pending and state.get('status')!='error' else state.get('status','pending'),'pending':pending,'lastSuccessAt':state.get('lastSuccessAt'),'errors':state.get('errors',[]),'siteUrl':ALLOWED_SITE,'portfolioUpdatedAt':read(DATA/'portfolio.json',{}).get('updatedAt'),'fundUpdatedAt':read(DATA/'fund.json',{}).get('source',{}).get('importedAt')}
 
 def start_background():
     def loop():

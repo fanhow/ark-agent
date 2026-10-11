@@ -23,6 +23,7 @@ async function readPublic(path){const r=await fetch(new URL(path,location.href),
 async function initialPortfolio(){let p=await get('portfolio');if(!p){p=await readPublic('data/portfolio.initial.json');await put('portfolio',p);}return copy(p);}
 async function savePortfolio(p){p=portfolio(p);const old=await initialPortfolio();const history=await get('history')||[];history.unshift(old);p.updatedAt=now();await put('history',history.slice(0,100));await put('portfolio',p);return copy(p);}
 export async function staticAPI(path,data,method='POST'){
+ if(path==='/api/fund')return null;
  if(path==='/api/status')return {aiConfigured:false,mode:'pages',model:null,csrfToken:null,timezone:'Asia/Taipei',today:today(),schedule:{provider:'GitHub Actions',hour:7,minute:52,status:'configured'}};
  if(path==='/crew.json')return readPublic('crew.json');
  if(path==='/api/portfolio')return data===undefined?initialPortfolio():savePortfolio(data);

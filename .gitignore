@@ -24,3 +24,5 @@ tests/pages-result.json
 
 data/shared-sync.json
 data/shared-sync.lock
+
+data/fund.json
