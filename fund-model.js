@@ -12,6 +12,8 @@ export function validateFund(f){
  for(const r of f.records){if(!dateOK(r.date)||!FUND_NUMBERS.every(k=>r[k]===null||(typeof r[k]==='number'&&Number.isFinite(r[k])))||!['screenshots','notes'].every(k=>typeof r[k]==='string'&&r[k].length<=20000))throw Error('基金明細無效');}
  if(!f.capital||typeof f.capital.initial!=='number'||!Number.isFinite(f.capital.initial)||f.capital.initial<0||!timeOK(f.capital.confirmedAt)||!Array.isArray(f.capital.events)||f.capital.events.length>1000)throw Error('本金格式無效');
  for(const e of f.capital.events)if(!dateOK(e.date)||typeof e.amount!=='number'||!Number.isFinite(e.amount)||typeof e.note!=='string'||e.note.length>2000)throw Error('入出金格式無效');
+ if(f.source.live!==undefined&&typeof f.source.live!=='boolean')throw Error('基金自動更新設定無效');
+ if(f.records.some(r=>r.updatedAt!==undefined&&!timeOK(r.updatedAt)))throw Error('基金欄位更新時間無效');
  if(!Array.isArray(f.notes)||f.notes.length>100||f.notes.some(n=>typeof n!=='string'||n.length>5000))throw Error('基金註記無效');
  return f;
 }
@@ -26,7 +28,7 @@ export function newer(a,b){
 }
 export function fundSummary(f,p){
  const latest=orderedRecords(f).at(-1),v=accountValues(p),total=pnlTotal(p);
- const sheet={date:latest.date,updatedAt:f.source.modifiedAt,source:'每日績效',kind:'sheet'};
+ const sheet={date:latest.date,updatedAt:latest.updatedAt||f.source.modifiedAt,source:'每日績效',kind:'sheet'};
  const photo={date:p.accountSnapshot?.asOf||p.asOf,updatedAt:p.accountSnapshot?.recordedAt,source:'已確認照片',kind:'photo'};
  const choose=(key,value,extra={})=>{
   const a={...photo,value,...extra},b={...sheet,value:latest[key]};

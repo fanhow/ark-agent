@@ -14,10 +14,12 @@ def validate_fund(f):
     url=urlparse(source['url'])
     if url.scheme!='https' or url.hostname!='docs.google.com' or not url.path.startswith('/spreadsheets/d/'):raise ValueError('基金來源無效')
     timestamp(source.get('modifiedAt'));timestamp(source.get('importedAt'))
+    if 'live' in source and not isinstance(source['live'],bool):raise ValueError('基金自動更新設定無效')
     rows=f.get('records')
     if not isinstance(rows,list) or not 1<=len(rows)<=5000:raise ValueError('基金明細筆數無效')
     dates=set()
     for row in rows:
+        if 'updatedAt' in row:timestamp(row['updatedAt'])
         date=valid_date(row.get('date'))
         if date in dates:raise ValueError('基金日期重複')
         dates.add(date)

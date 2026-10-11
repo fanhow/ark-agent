@@ -1,4 +1,4 @@
-import {renderFund} from './fund.js';
+import {renderFund,updateFundStatus} from './fund.js';
 import {fundSummary} from './fund-model.js';
 import {renderMacro} from './macro.js';
 import {staticAPI,exportPrivate,restorePrivate} from './storage.js';
@@ -88,6 +88,7 @@ async function pollShared(){
  sharedPolling=true;const node=$('#shared-status');
  try{
   const status=await api('/api/shared/status');
+  if(!$('#edit-dialog').open&&!$('#upload-dialog').open&&!state.journalAbort){const next=await api('/api/fund');const changed=JSON.stringify({...next,liveSource:undefined})!==JSON.stringify({...state.fund,liveSource:undefined});state.fund=next;if(changed)renderPortfolio();else updateFundStatus($('#fund-dashboard'),next);}
   if(state.status.shared){
    node.hidden=false;
    const docs=status.documents||[],snapshot=JSON.stringify(docs.map(d=>[d.key,d.revision]));

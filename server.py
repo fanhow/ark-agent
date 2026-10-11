@@ -176,7 +176,14 @@ class Handler(BaseHTTPRequestHandler):
     def get(self,path,q):
         if path=='/api/shared/status':self.respond(shared_sync.public_status());return
         if path=='/api/status':self.respond({'aiConfigured':ai.configured(),'model':ai.model(),'csrfToken':TOKEN,'timezone':'Asia/Taipei','today':today(),'lastRun':read(DATA/'last-run.json'),'schedule':read(DATA/'schedule.json')});return
-        if path=='/api/fund':self.respond(read(DATA/'fund.json'));return
+        if path=='/api/fund':
+            value=read(DATA/'fund.json');config=shared_sync.settings()
+            if value and value.get('source',{}).get('live') and shared_sync.configured(config):
+                try:
+                    cloud=shared_sync.request(config,'fund:stable500',refresh=True)
+                    if cloud.get('value'):value={**cloud['value'],'liveSource':cloud.get('liveSource')}
+                except shared_sync.SyncError as e:value={**value,'liveSource':{'status':'stale','error':str(e),'checkedAt':now()}}
+            self.respond(value);return
         if path=='/api/portfolio':self.respond(read(DATA/'portfolio.json'));return
         if path=='/api/portfolio/previous':
             current=read(DATA/'portfolio.json');files=sorted((DATA/'history').glob('[0-9]*.json'),reverse=True)

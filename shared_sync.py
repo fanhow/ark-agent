@@ -35,8 +35,8 @@ class SyncError(Exception):pass
 class NoRedirect(urllib.request.HTTPRedirectHandler):
     def redirect_request(self,req,fp,code,msg,headers,newurl):return None
 
-def request(config,key,body=None):
-    url=config['ARK_SHARED_SITE_URL']+'/api/shared/sync?'+urlencode({'key':key})
+def request(config,key,body=None,refresh=False):
+    url=config['ARK_SHARED_SITE_URL']+'/api/shared/sync?'+urlencode({'key':key,**({'refresh':'1'} if refresh else {})})
     headers={'OAI-Sites-Authorization':'Bearer '+config['ARK_SHARED_SERVICE_TOKEN'],'X-Ark-Sync-Key':config['ARK_SHARED_SYNC_SECRET'],'Content-Type':'application/json'}
     req=urllib.request.Request(url,headers=headers,data=None if body is None else json.dumps(body,ensure_ascii=False,allow_nan=False).encode())
     opener=urllib.request.build_opener(NoRedirect(),urllib.request.HTTPSHandler(context=ai.context()))
@@ -83,6 +83,7 @@ def sync_once(transport=None):
         state=read(STATE,{'documents':{}});state.setdefault('documents',{});errors=[];changed=0
         send=transport or (lambda key,body=None:request(config,key,body))
         try:
+            if transport is None and read(DATA/'fund.json',{}).get('source',{}).get('live'):request(config,'fund:stable500',refresh=True)
             manifest=send('manifest').get('documents',[]);remote={d['key']:d for d in manifest}
             local=dict(documents())
             for key in sorted(set(local)|set(remote)):
