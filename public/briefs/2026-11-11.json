@@ -1,0 +1,1131 @@
+{
+  "date": "2026-11-11",
+  "generatedAt": "2026-11-11T11:09:53+08:00",
+  "headline": "2026-11-10 全球及台股市場數據與聯準會動態分析",
+  "stance": {
+    "score": null,
+    "label": "中立觀望"
+  },
+  "market": [
+    {
+      "label": "台股加權",
+      "value": 42711.92,
+      "change": 2.521,
+      "dir": 1,
+      "note": "前次可取得的已收盤資料；非即時行情",
+      "asOf": "2026-11-10",
+      "source": "https://www.twse.com.tw/rwd/zh/afterTrading/FMTQIK?date=20261111&response=json",
+      "fetchedAt": "2026-11-11T11:09:53+08:00",
+      "unit": "點"
+    },
+    {
+      "label": "台積電",
+      "value": 2285.0,
+      "change": 2.237,
+      "dir": 1,
+      "note": "前次可取得的已收盤資料；非即時行情",
+      "asOf": "2026-11-10",
+      "source": "https://www.twse.com.tw/rwd/zh/afterTrading/STOCK_DAY?stockNo=2330&date=20261111&response=json",
+      "fetchedAt": "2026-11-11T11:09:53+08:00",
+      "unit": "元"
+    },
+    {
+      "label": "S&P 500",
+      "value": 7520.93,
+      "change": -0.384,
+      "dir": -1,
+      "note": "Yahoo Finance 已收盤日 K；日期為美東交易日。資料延遲可能存在。",
+      "asOf": "2026-11-10",
+      "source": "https://query1.finance.yahoo.com/v8/finance/chart/%5EGSPC?interval=1d&range=1mo",
+      "fetchedAt": "2026-11-11T11:09:52+08:00",
+      "unit": "點"
+    },
+    {
+      "label": "那斯達克",
+      "value": 25065.88,
+      "change": -0.742,
+      "dir": -1,
+      "note": "Yahoo Finance 已收盤日 K；日期為美東交易日。資料延遲可能存在。",
+      "asOf": "2026-11-10",
+      "source": "https://query1.finance.yahoo.com/v8/finance/chart/%5EIXIC?interval=1d&range=1mo",
+      "fetchedAt": "2026-11-11T11:09:52+08:00",
+      "unit": "點"
+    },
+    {
+      "label": "美國 10 年債殖利率",
+      "value": 4.88,
+      "change": 0.02,
+      "dir": 0,
+      "note": "官方序列最新可得觀測；變動為百分點，發布可能落後",
+      "asOf": "2026-11-09",
+      "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS10&cosd=2026-10-21&coed=2026-11-11",
+      "fetchedAt": "2026-11-11T11:09:53+08:00",
+      "unit": "%"
+    },
+    {
+      "label": "聯邦基金有效利率",
+      "value": 3.88,
+      "change": null,
+      "dir": 0,
+      "note": "紐約 Fed EFFR，非 FOMC 目標區間；前值變動待更新",
+      "asOf": "2026-11-09",
+      "source": "https://markets.newyorkfed.org/api/rates/unsecured/effr/last/10.json",
+      "fetchedAt": "2026-11-11T11:09:53+08:00",
+      "unit": "%"
+    }
+  ],
+  "macroRadar": {
+    "items": [
+      {
+        "id": "gold",
+        "label": "黃金期貨",
+        "series": "GC=F",
+        "unit": "美元／金衡盎司",
+        "changeUnit": "%",
+        "role": "分散風險",
+        "framework": "黃金沒有利息收入，應搭配實質利率、美元與避險需求觀察；流動性緊縮時也可能被賣出。期貨有轉倉與基差，不等同現貨或持有報酬。",
+        "reference": "https://www.gold.org/goldhub/research/relevance-of-gold-as-a-strategic-asset",
+        "value": 4114.5,
+        "change": 0.972,
+        "asOf": "2026-11-09",
+        "previousAsOf": "2026-11-06",
+        "ageDays": 2,
+        "source": "https://query1.finance.yahoo.com/v8/finance/chart/GC%3DF?interval=1d&range=3mo",
+        "fetchedAt": "2026-11-11T11:09:52+08:00",
+        "note": "Yahoo Finance GC=F 日 K；保守排除交易所當日資料。連續報價可能換月，單次漲跌不是可實現持有報酬。",
+        "contract": "Gold Dec 26",
+        "history": [
+          {
+            "date": "2026-10-12",
+            "value": 4190.60009765625
+          },
+          {
+            "date": "2026-10-13",
+            "value": 4177.2998046875
+          },
+          {
+            "date": "2026-10-14",
+            "value": 4107.89990234375
+          },
+          {
+            "date": "2026-10-15",
+            "value": 4170.10009765625
+          },
+          {
+            "date": "2026-10-16",
+            "value": 4181.10009765625
+          },
+          {
+            "date": "2026-10-19",
+            "value": 4160.10009765625
+          },
+          {
+            "date": "2026-10-20",
+            "value": 4142.60009765625
+          },
+          {
+            "date": "2026-10-21",
+            "value": 4150.0
+          },
+          {
+            "date": "2026-10-22",
+            "value": 4060.39990234375
+          },
+          {
+            "date": "2026-10-23",
+            "value": 4007.89990234375
+          },
+          {
+            "date": "2026-10-26",
+            "value": 4038.39990234375
+          },
+          {
+            "date": "2026-10-27",
+            "value": 4074.60009765625
+          },
+          {
+            "date": "2026-10-28",
+            "value": 4051.60009765625
+          },
+          {
+            "date": "2026-10-29",
+            "value": 4031.39990234375
+          },
+          {
+            "date": "2026-10-30",
+            "value": 3898.89990234375
+          },
+          {
+            "date": "2026-11-02",
+            "value": 3969.60009765625
+          },
+          {
+            "date": "2026-11-03",
+            "value": 3940.39990234375
+          },
+          {
+            "date": "2026-11-04",
+            "value": 4073.0
+          },
+          {
+            "date": "2026-11-05",
+            "value": 4113.5
+          },
+          {
+            "date": "2026-11-06",
+            "value": 4074.89990234375
+          },
+          {
+            "date": "2026-11-09",
+            "value": 4114.5
+          }
+        ],
+        "status": "available"
+      },
+      {
+        "id": "oil",
+        "label": "WTI 原油現貨",
+        "series": "DCOILWTICO",
+        "unit": "美元／桶",
+        "changeUnit": "%",
+        "role": "通膨與供需",
+        "framework": "原油可反映供給衝擊與需求景氣。供給中斷可能推高油價；衰退需求減弱時可能下跌，不是通用避險資產。",
+        "reference": "https://www.eia.gov/finance/markets/products/trade.php",
+        "value": 99.64,
+        "change": -0.42,
+        "asOf": "2026-11-03",
+        "previousAsOf": "2026-11-02",
+        "ageDays": 8,
+        "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DCOILWTICO&cosd=2026-05-15&coed=2026-11-11",
+        "fetchedAt": "2026-11-11T11:09:52+08:00",
+        "note": "FRED 最新可取得的歷史觀測；發布可能落後，非即時報價。變動比較相鄰有效觀測，未必是前一個曆日。",
+        "contract": null,
+        "history": [
+          {
+            "date": "2026-10-06",
+            "value": 96.24
+          },
+          {
+            "date": "2026-10-07",
+            "value": 95.02
+          },
+          {
+            "date": "2026-10-08",
+            "value": 98.26
+          },
+          {
+            "date": "2026-10-09",
+            "value": 98.73
+          },
+          {
+            "date": "2026-10-12",
+            "value": 94.99
+          },
+          {
+            "date": "2026-10-13",
+            "value": 95.39
+          },
+          {
+            "date": "2026-10-14",
+            "value": 96.34
+          },
+          {
+            "date": "2026-10-15",
+            "value": 104.71
+          },
+          {
+            "date": "2026-10-16",
+            "value": 108.21
+          },
+          {
+            "date": "2026-10-19",
+            "value": 110.01
+          },
+          {
+            "date": "2026-10-20",
+            "value": 107.89
+          },
+          {
+            "date": "2026-10-21",
+            "value": 103.95
+          },
+          {
+            "date": "2026-10-22",
+            "value": 104.27
+          },
+          {
+            "date": "2026-10-23",
+            "value": 109.72
+          },
+          {
+            "date": "2026-10-26",
+            "value": 105.25
+          },
+          {
+            "date": "2026-10-27",
+            "value": 103.37
+          },
+          {
+            "date": "2026-10-28",
+            "value": 106.25
+          },
+          {
+            "date": "2026-10-29",
+            "value": 105.51
+          },
+          {
+            "date": "2026-10-30",
+            "value": 107.56
+          },
+          {
+            "date": "2026-11-02",
+            "value": 100.06
+          },
+          {
+            "date": "2026-11-03",
+            "value": 99.64
+          }
+        ],
+        "status": "available"
+      },
+      {
+        "id": "yen",
+        "label": "日圓 USD/JPY",
+        "series": "DEXJPUS",
+        "unit": "日圓／美元",
+        "changeUnit": "%",
+        "role": "利差與套利平倉",
+        "framework": "報價是每美元可換多少日圓：數值下降＝日圓升值。觀察美日利差、央行政策與套利平倉；日圓並非每次市場下跌都會升值。",
+        "reference": "https://www.bis.org/publ/qtrpdf/r_qt2409a.pdf",
+        "value": 158.23,
+        "change": 0.298,
+        "asOf": "2026-11-06",
+        "previousAsOf": "2026-11-05",
+        "ageDays": 5,
+        "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DEXJPUS&cosd=2026-05-15&coed=2026-11-11",
+        "fetchedAt": "2026-11-11T11:09:52+08:00",
+        "note": "FRED 最新可取得的歷史觀測；發布可能落後，非即時報價。變動比較相鄰有效觀測，未必是前一個曆日。",
+        "contract": null,
+        "history": [
+          {
+            "date": "2026-10-08",
+            "value": 158.33
+          },
+          {
+            "date": "2026-10-09",
+            "value": 158.34
+          },
+          {
+            "date": "2026-10-13",
+            "value": 158.36
+          },
+          {
+            "date": "2026-10-14",
+            "value": 158.84
+          },
+          {
+            "date": "2026-10-15",
+            "value": 158.18
+          },
+          {
+            "date": "2026-10-16",
+            "value": 158.0
+          },
+          {
+            "date": "2026-10-19",
+            "value": 158.49
+          },
+          {
+            "date": "2026-10-20",
+            "value": 158.2
+          },
+          {
+            "date": "2026-10-21",
+            "value": 158.13
+          },
+          {
+            "date": "2026-10-22",
+            "value": 157.11
+          },
+          {
+            "date": "2026-10-23",
+            "value": 156.87
+          },
+          {
+            "date": "2026-10-26",
+            "value": 157.58
+          },
+          {
+            "date": "2026-10-27",
+            "value": 157.86
+          },
+          {
+            "date": "2026-10-28",
+            "value": 158.24
+          },
+          {
+            "date": "2026-10-29",
+            "value": 157.83
+          },
+          {
+            "date": "2026-10-30",
+            "value": 157.47
+          },
+          {
+            "date": "2026-11-02",
+            "value": 157.81
+          },
+          {
+            "date": "2026-11-03",
+            "value": 158.5
+          },
+          {
+            "date": "2026-11-04",
+            "value": 158.44
+          },
+          {
+            "date": "2026-11-05",
+            "value": 157.76
+          },
+          {
+            "date": "2026-11-06",
+            "value": 158.23
+          }
+        ],
+        "status": "available"
+      },
+      {
+        "id": "vix",
+        "label": "VIX 波動率",
+        "series": "VIXCLS",
+        "unit": "點",
+        "changeUnit": "點",
+        "role": "選擇權風險定價",
+        "framework": "VIX 反映 S&P 500 未來約 30 天的年化隱含波動率。上升表示預期波動加大，不是下跌機率；下降也不保證股市上漲。VIX 指數不能直接持有。",
+        "reference": "https://www.cboe.com/tradable-products/vix/",
+        "value": 19.92,
+        "change": -5.72,
+        "asOf": "2026-11-09",
+        "previousAsOf": "2026-11-06",
+        "ageDays": 2,
+        "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=VIXCLS&cosd=2026-05-15&coed=2026-11-11",
+        "fetchedAt": "2026-11-11T11:09:52+08:00",
+        "note": "FRED 最新可取得的歷史觀測；發布可能落後，非即時報價。變動比較相鄰有效觀測，未必是前一個曆日。",
+        "contract": null,
+        "history": [
+          {
+            "date": "2026-10-12",
+            "value": 15.21
+          },
+          {
+            "date": "2026-10-13",
+            "value": 15.27
+          },
+          {
+            "date": "2026-10-14",
+            "value": 16.87
+          },
+          {
+            "date": "2026-10-15",
+            "value": 16.46
+          },
+          {
+            "date": "2026-10-16",
+            "value": 19.99
+          },
+          {
+            "date": "2026-10-19",
+            "value": 18.44
+          },
+          {
+            "date": "2026-10-20",
+            "value": 17.31
+          },
+          {
+            "date": "2026-10-21",
+            "value": 16.68
+          },
+          {
+            "date": "2026-10-22",
+            "value": 19.03
+          },
+          {
+            "date": "2026-10-23",
+            "value": 19.45
+          },
+          {
+            "date": "2026-10-26",
+            "value": 18.39
+          },
+          {
+            "date": "2026-10-27",
+            "value": 17.52
+          },
+          {
+            "date": "2026-10-28",
+            "value": 16.91
+          },
+          {
+            "date": "2026-10-29",
+            "value": 17.2
+          },
+          {
+            "date": "2026-10-30",
+            "value": 19.42
+          },
+          {
+            "date": "2026-11-02",
+            "value": 21.15
+          },
+          {
+            "date": "2026-11-03",
+            "value": 20.83
+          },
+          {
+            "date": "2026-11-04",
+            "value": 16.61
+          },
+          {
+            "date": "2026-11-05",
+            "value": 28.18
+          },
+          {
+            "date": "2026-11-06",
+            "value": 25.64
+          },
+          {
+            "date": "2026-11-09",
+            "value": 19.92
+          }
+        ],
+        "status": "available"
+      },
+      {
+        "id": "realYield",
+        "label": "美國 10 年實質殖利率",
+        "series": "DFII10",
+        "unit": "%",
+        "changeUnit": "基點",
+        "role": "持有黃金的機會成本",
+        "framework": "使用通膨連結公債殖利率。上升通常提高持有無息黃金的機會成本，也可能壓抑長期成長股估值；不是唯一驅動因素。",
+        "reference": "https://fred.stlouisfed.org/series/DFII10",
+        "value": 2.66,
+        "change": 3.0,
+        "asOf": "2026-11-09",
+        "previousAsOf": "2026-11-06",
+        "ageDays": 2,
+        "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DFII10&cosd=2026-05-15&coed=2026-11-11",
+        "fetchedAt": "2026-11-11T11:09:52+08:00",
+        "note": "FRED 最新可取得的歷史觀測；發布可能落後，非即時報價。變動比較相鄰有效觀測，未必是前一個曆日。",
+        "contract": null,
+        "history": [
+          {
+            "date": "2026-10-09",
+            "value": 2.91
+          },
+          {
+            "date": "2026-10-13",
+            "value": 2.88
+          },
+          {
+            "date": "2026-10-14",
+            "value": 2.84
+          },
+          {
+            "date": "2026-10-15",
+            "value": 2.78
+          },
+          {
+            "date": "2026-10-16",
+            "value": 2.74
+          },
+          {
+            "date": "2026-10-19",
+            "value": 2.8
+          },
+          {
+            "date": "2026-10-20",
+            "value": 2.77
+          },
+          {
+            "date": "2026-10-21",
+            "value": 2.76
+          },
+          {
+            "date": "2026-10-22",
+            "value": 2.64
+          },
+          {
+            "date": "2026-10-23",
+            "value": 2.66
+          },
+          {
+            "date": "2026-10-26",
+            "value": 2.66
+          },
+          {
+            "date": "2026-10-27",
+            "value": 2.64
+          },
+          {
+            "date": "2026-10-28",
+            "value": 2.67
+          },
+          {
+            "date": "2026-10-29",
+            "value": 2.63
+          },
+          {
+            "date": "2026-10-30",
+            "value": 2.6
+          },
+          {
+            "date": "2026-11-02",
+            "value": 2.62
+          },
+          {
+            "date": "2026-11-03",
+            "value": 2.65
+          },
+          {
+            "date": "2026-11-04",
+            "value": 2.64
+          },
+          {
+            "date": "2026-11-05",
+            "value": 2.6
+          },
+          {
+            "date": "2026-11-06",
+            "value": 2.63
+          },
+          {
+            "date": "2026-11-09",
+            "value": 2.66
+          }
+        ],
+        "status": "available"
+      },
+      {
+        "id": "conditions",
+        "label": "Chicago Fed 金融情勢",
+        "series": "NFCI",
+        "unit": "標準差",
+        "changeUnit": "標準差",
+        "role": "每週信用與流動性",
+        "framework": "Chicago Fed NFCI 為每週指數，整合風險、信用與槓桿。正值表示比歷史平均緊縮，負值表示較寬鬆；變動與水準不同，不能將負值當作沒有風險。",
+        "reference": "https://www.chicagofed.org/research/data/nfci/background",
+        "value": -0.459,
+        "change": 0.008,
+        "asOf": "2026-10-30",
+        "previousAsOf": "2026-10-23",
+        "ageDays": 12,
+        "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=NFCI&cosd=2026-05-15&coed=2026-11-11",
+        "fetchedAt": "2026-11-11T11:09:52+08:00",
+        "note": "每週資料，變動比較上期週值。FRED 最新可取得的歷史觀測；發布可能落後，非即時報價。變動比較相鄰有效觀測，未必是前一個曆日。",
+        "contract": null,
+        "history": [
+          {
+            "date": "2026-06-12",
+            "value": -0.504
+          },
+          {
+            "date": "2026-06-19",
+            "value": -0.506
+          },
+          {
+            "date": "2026-06-26",
+            "value": -0.509
+          },
+          {
+            "date": "2026-07-03",
+            "value": -0.515
+          },
+          {
+            "date": "2026-07-10",
+            "value": -0.521
+          },
+          {
+            "date": "2026-07-17",
+            "value": -0.527
+          },
+          {
+            "date": "2026-07-24",
+            "value": -0.533
+          },
+          {
+            "date": "2026-07-31",
+            "value": -0.538
+          },
+          {
+            "date": "2026-08-07",
+            "value": -0.542
+          },
+          {
+            "date": "2026-08-14",
+            "value": -0.546
+          },
+          {
+            "date": "2026-08-21",
+            "value": -0.547
+          },
+          {
+            "date": "2026-08-28",
+            "value": -0.545
+          },
+          {
+            "date": "2026-09-04",
+            "value": -0.54
+          },
+          {
+            "date": "2026-09-11",
+            "value": -0.532
+          },
+          {
+            "date": "2026-09-18",
+            "value": -0.522
+          },
+          {
+            "date": "2026-09-25",
+            "value": -0.51
+          },
+          {
+            "date": "2026-10-02",
+            "value": -0.498
+          },
+          {
+            "date": "2026-10-09",
+            "value": -0.487
+          },
+          {
+            "date": "2026-10-16",
+            "value": -0.477
+          },
+          {
+            "date": "2026-10-23",
+            "value": -0.467
+          },
+          {
+            "date": "2026-10-30",
+            "value": -0.459
+          }
+        ],
+        "status": "available"
+      },
+      {
+        "id": "dollar",
+        "label": "Fed 廣義美元指數",
+        "series": "DTWEXBGS",
+        "unit": "指數",
+        "changeUnit": "%",
+        "role": "全球資金與匯率",
+        "framework": "貿易加權的廣義美元指數，不是 DXY。美元轉強可提高非美元買方購買美元計價商品的成本，應與利率及資金需求一起解讀。",
+        "reference": "https://fred.stlouisfed.org/series/DTWEXBGS",
+        "value": 121.8803,
+        "change": 0.308,
+        "asOf": "2026-11-06",
+        "previousAsOf": "2026-11-05",
+        "ageDays": 5,
+        "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DTWEXBGS&cosd=2026-05-15&coed=2026-11-11",
+        "fetchedAt": "2026-11-11T11:09:52+08:00",
+        "note": "FRED 最新可取得的歷史觀測；發布可能落後，非即時報價。變動比較相鄰有效觀測，未必是前一個曆日。",
+        "contract": null,
+        "history": [
+          {
+            "date": "2026-10-08",
+            "value": 121.4469
+          },
+          {
+            "date": "2026-10-09",
+            "value": 121.6023
+          },
+          {
+            "date": "2026-10-13",
+            "value": 121.4433
+          },
+          {
+            "date": "2026-10-14",
+            "value": 122.0037
+          },
+          {
+            "date": "2026-10-15",
+            "value": 121.5693
+          },
+          {
+            "date": "2026-10-16",
+            "value": 121.4048
+          },
+          {
+            "date": "2026-10-19",
+            "value": 121.3248
+          },
+          {
+            "date": "2026-10-20",
+            "value": 121.116
+          },
+          {
+            "date": "2026-10-21",
+            "value": 121.3422
+          },
+          {
+            "date": "2026-10-22",
+            "value": 121.3531
+          },
+          {
+            "date": "2026-10-23",
+            "value": 121.3202
+          },
+          {
+            "date": "2026-10-26",
+            "value": 121.6042
+          },
+          {
+            "date": "2026-10-27",
+            "value": 121.6622
+          },
+          {
+            "date": "2026-10-28",
+            "value": 121.8491
+          },
+          {
+            "date": "2026-10-29",
+            "value": 121.7361
+          },
+          {
+            "date": "2026-10-30",
+            "value": 121.6656
+          },
+          {
+            "date": "2026-11-02",
+            "value": 121.3702
+          },
+          {
+            "date": "2026-11-03",
+            "value": 121.8084
+          },
+          {
+            "date": "2026-11-04",
+            "value": 121.3983
+          },
+          {
+            "date": "2026-11-05",
+            "value": 121.5061
+          },
+          {
+            "date": "2026-11-06",
+            "value": 121.8803
+          }
+        ],
+        "status": "available"
+      }
+    ],
+    "researchUrl": "https://stable-value.fanhow.chatgpt.site/sentiment",
+    "note": "各市場觀測日期不同，請勿視為同日同步訊號。箭頭只表示數值變動，沒有合成買賣分數。歷史資料可能修訂，不作當時可知資料的回測。"
+  },
+  "macro": [
+    {
+      "title": "Fed 已發布演說：Bowman, The U.S. Economy and Considerations for Monetary Policy",
+      "time": "2026-11-11T04:30+08:00",
+      "importance": 2,
+      "consensus": null,
+      "previous": null,
+      "actual": null,
+      "impact": "僅列官方演說標題與發布時間，未將標題推論為利率立場。",
+      "note": "此時間是 RSS 公布時間，不是未來演說預告；非數據項目，預期值與前值不適用。",
+      "source": "https://www.federalreserve.gov/newsevents/speech/bowman20261110a.htm",
+      "dataDate": "2026-11-11",
+      "fetchedAt": "2026-11-11T11:09:53+08:00"
+    },
+    {
+      "title": "Consumer Price Index",
+      "time": "2026-11-10T21:30+08:00",
+      "importance": 3,
+      "consensus": null,
+      "previous": null,
+      "actual": null,
+      "impact": "發布可能影響成長、通膨與利率預期；影響方向須依實際數據判斷。",
+      "note": "官方排程；預期值、前值與實際值查不到／待更新。",
+      "source": "https://www.bls.gov/schedule/news_release/bls.ics",
+      "dataDate": "2026-11-11",
+      "fetchedAt": "2026-11-11T11:09:53+08:00"
+    },
+    {
+      "title": "Fed 已發布演說：Waller, The Economic Outlook and Some Thoughts on Labor Market Dynamism",
+      "time": "2026-11-10T17:00+08:00",
+      "importance": 2,
+      "consensus": null,
+      "previous": null,
+      "actual": null,
+      "impact": "僅列官方演說標題與發布時間，未將標題推論為利率立場。",
+      "note": "此時間是 RSS 公布時間，不是未來演說預告；非數據項目，預期值與前值不適用。",
+      "source": "https://www.federalreserve.gov/newsevents/speech/waller20261110a.htm",
+      "dataDate": "2026-11-10",
+      "fetchedAt": "2026-11-11T11:09:53+08:00"
+    },
+    {
+      "title": "Real Earnings",
+      "time": "2026-11-10T21:30+08:00",
+      "importance": 2,
+      "consensus": null,
+      "previous": null,
+      "actual": null,
+      "impact": "發布可能影響成長、通膨與利率預期；影響方向須依實際數據判斷。",
+      "note": "官方排程；預期值、前值與實際值查不到／待更新。",
+      "source": "https://www.bls.gov/schedule/news_release/bls.ics",
+      "dataDate": "2026-11-11",
+      "fetchedAt": "2026-11-11T11:09:53+08:00"
+    },
+    {
+      "title": "Producer Price Index",
+      "time": "2026-11-13T21:30+08:00",
+      "importance": 2,
+      "consensus": null,
+      "previous": null,
+      "actual": null,
+      "impact": "發布可能影響成長、通膨與利率預期；影響方向須依實際數據判斷。",
+      "note": "官方排程；預期值、前值與實際值查不到／待更新。",
+      "source": "https://www.bls.gov/schedule/news_release/bls.ics",
+      "dataDate": "2026-11-11",
+      "fetchedAt": "2026-11-11T11:09:53+08:00"
+    }
+  ],
+  "recap": [
+    "S&P 500：2026-11-10 收盤 7,520.93，漲跌 -0.38%。",
+    "那斯達克：2026-11-10 收盤 25,065.88，漲跌 -0.74%。",
+    "道瓊：2026-11-10 收盤 52,231.89，漲跌 -0.30%。",
+    "費城半導體：2026-11-10 收盤 9,998.33，漲跌 -0.35%。"
+  ],
+  "radio": {
+    "title": "EP 187.如果不為薪水工作？犀利哥談「人生選擇權」用投資換取你想要的時間",
+    "date": "2026-09-12",
+    "points": [
+      "市場整體呈現美股小幅調整，台股及台積電表現較強。",
+      "美債殖利率維持高位，實質利率提升，利率壓力仍存。",
+      "Fed多場演說釋放市場關注動態，暫無利率方向明確訊號。",
+      "Chicago Fed金融情勢指數顯示信貸狀況仍寬鬆，風險尚未放大。",
+      "原油價格八天前為99.64美元，仍維持高位，反映供需平衡。",
+      "美元走強帶來匯率壓力，日圓貶值不具普遍避險意義。",
+      "VIX下降到19.92點，反映市場預期波動性降低，非必然漲勢信號。",
+      "Podcast主題聚焦投資替代薪資的個人理財選擇，未涵蓋市場展望。"
+    ],
+    "note": "已核實 Apple ID 對應「方舟運算」。僅讀 RSS 簡介，未收聽音訊。 最新可得集數不一定為今日。",
+    "url": "https://player.soundon.fm/p/049c00d3-d675-461e-9a11-522694633cdb/episodes/8976319f-a1c2-4b44-85c9-4c4bda75724b",
+    "description": "市場最能滿足你的台美股系統「ARK 方舟運算」下載連結： https://onelink.to/zcd4s6 方舟官方 Line 帳號： https://line.me/R/ti/p/@708uxaza 任何系統使用上的問題歡迎至官方Line私訊提問 大俠個人的理財心得分享， 文字內容沒有對個股進行推薦。 以上資料為舉例說明，不代表未來實際績效。投資人因不同時間進場，將有不同之投資績效，過去之績效亦不代表未來績效之保證。 -- Hosting provided by SoundOn",
+    "source": "https://feeds.soundon.fm/podcasts/049c00d3-d675-461e-9a11-522694633cdb.xml",
+    "fetchedAt": "2026-11-11T11:09:53+08:00"
+  },
+  "board": {
+    "status": "unavailable",
+    "note": "看板為 App 會員限定，今日未納入；Threads @arkerationapp 查不到／待更新。",
+    "items": []
+  },
+  "lenses": {
+    "buffett": {
+      "stance": 0,
+      "take": "依巴菲特價值投資框架，台積電股價上漲2.237%顯示一定估值改善且具安全邊際。美國10年債殖利率維持高位4.88%，提醒仍有利率重力的壓力存在。但資料缺少企業現金流與護城河質量，限制進一步評估安全邊際。",
+      "watch": "企業現金流、估值與安全邊際"
+    },
+    "marks": {
+      "stance": null,
+      "take": "馬克斯著重市場情緒與風險溢酬，當天S&P 500和那斯達克皆小幅下跌呈現震盪格局；Chicago Fed金融情勢指數顯示持續寬鬆，市場未見明顯風險警訊。限制是缺乏具體市場情緒指標細節，無法判斷鐘擺階段。",
+      "watch": "市場情緒、信用風險與風險溢酬"
+    },
+    "dalio": {
+      "stance": 0,
+      "take": "達利歐關注長短期債務週期和實質利率，美國10年實質殖利率上升至2.66%、美債殖利率維持高檔，顯示債務成本增加。Chicago Fed NFCI仍為負值顯示信用與流動性較寬鬆。資料缺乏政府債務最新變化，限制完整債務週期判斷。",
+      "watch": "實質利率、資產相關性與債務"
+    },
+    "druckenmiller": {
+      "stance": -1,
+      "take": "卓肯米勒視流動性與央行政策為主軸，美國聯邦基金有效利率穩定於3.88%且美債殖利率微升，顯示政策未鬆動，流動性趨緊，股市小幅下跌反映資金面壓力。缺乏FED官員明確利率立場訊息，不足判斷政策轉折。",
+      "watch": "流動性方向與政策轉折"
+    },
+    "wood": {
+      "stance": 1,
+      "take": "伍德著眼於創新股長線成長，儘管美科技指數那斯達克下跌0.74%，台積電強勁上揚2.237%及台股整體上漲，仍顯示創新股經歷逢低吸納機會。限制是缺乏創新企業成長數據與估值變化。",
+      "watch": "創新企業成長、估值與資金成本"
+    },
+    "huang": {
+      "stance": 1,
+      "take": "黃仁勳框架聚焦AI與資料中心需求，台積電股價上漲並不直接反映NVIDIA詳情，但半導體費城半導體指數下跌0.35%顯示業界有短期壓力。無直接運算需求或NVIDIA供應鏈資訊限制判斷。",
+      "watch": "運算需求、資料中心投資與供應能力"
+    },
+    "wei": {
+      "stance": 0,
+      "take": "魏哲家關注先進製程供需及訂單能見度，台積電股價上漲但費城半導體指數及美股科技股下跌，顯示供需仍有不確定。匯率方面，USD/JPY上升代表日圓貶值，對出口構成利好。缺乏訂單與客戶最新動態限制判斷。",
+      "watch": "先進封裝產能、訂單與匯率"
+    },
+    "nadella": {
+      "stance": null,
+      "take": "納德拉重視企業雲端投資與採用率，資料中缺少具體雲端資本支出與客戶採用數據，而美股科技股的下跌與台積電上漲複雜影響判斷。須更多企業投資回報資料。",
+      "watch": "雲端採用、資本支出與投資回報"
+    }
+  },
+  "sources": [
+    {
+      "title": "台股加權",
+      "url": "https://www.twse.com.tw/rwd/zh/afterTrading/FMTQIK?date=20261111&response=json",
+      "dataDate": "2026-11-10",
+      "fetchedAt": "2026-11-11T11:09:53+08:00",
+      "status": "ok"
+    },
+    {
+      "title": "台積電",
+      "url": "https://www.twse.com.tw/rwd/zh/afterTrading/STOCK_DAY?stockNo=2330&date=20261111&response=json",
+      "dataDate": "2026-11-10",
+      "fetchedAt": "2026-11-11T11:09:53+08:00",
+      "status": "ok"
+    },
+    {
+      "title": "S&P 500",
+      "url": "https://query1.finance.yahoo.com/v8/finance/chart/%5EGSPC?interval=1d&range=1mo",
+      "dataDate": "2026-11-10",
+      "fetchedAt": "2026-11-11T11:09:52+08:00",
+      "status": "ok"
+    },
+    {
+      "title": "那斯達克",
+      "url": "https://query1.finance.yahoo.com/v8/finance/chart/%5EIXIC?interval=1d&range=1mo",
+      "dataDate": "2026-11-10",
+      "fetchedAt": "2026-11-11T11:09:52+08:00",
+      "status": "ok"
+    },
+    {
+      "title": "美國 10 年債殖利率",
+      "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS10&cosd=2026-10-21&coed=2026-11-11",
+      "dataDate": "2026-11-09",
+      "fetchedAt": "2026-11-11T11:09:53+08:00",
+      "status": "ok"
+    },
+    {
+      "title": "聯邦基金有效利率",
+      "url": "https://markets.newyorkfed.org/api/rates/unsecured/effr/last/10.json",
+      "dataDate": "2026-11-09",
+      "fetchedAt": "2026-11-11T11:09:53+08:00",
+      "status": "ok"
+    },
+    {
+      "title": "道瓊",
+      "url": "https://query1.finance.yahoo.com/v8/finance/chart/%5EDJI?interval=1d&range=1mo",
+      "dataDate": "2026-11-10",
+      "fetchedAt": "2026-11-11T11:09:52+08:00",
+      "status": "ok"
+    },
+    {
+      "title": "費城半導體",
+      "url": "https://query1.finance.yahoo.com/v8/finance/chart/%5ESOX?interval=1d&range=1mo",
+      "dataDate": "2026-11-10",
+      "fetchedAt": "2026-11-11T11:09:52+08:00",
+      "status": "ok"
+    },
+    {
+      "title": "黃金期貨",
+      "url": "https://query1.finance.yahoo.com/v8/finance/chart/GC%3DF?interval=1d&range=3mo",
+      "dataDate": "2026-11-09",
+      "fetchedAt": "2026-11-11T11:09:52+08:00",
+      "status": "ok"
+    },
+    {
+      "title": "WTI 原油現貨",
+      "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DCOILWTICO&cosd=2026-05-15&coed=2026-11-11",
+      "dataDate": "2026-11-03",
+      "fetchedAt": "2026-11-11T11:09:52+08:00",
+      "status": "ok"
+    },
+    {
+      "title": "日圓 USD/JPY",
+      "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DEXJPUS&cosd=2026-05-15&coed=2026-11-11",
+      "dataDate": "2026-11-06",
+      "fetchedAt": "2026-11-11T11:09:52+08:00",
+      "status": "ok"
+    },
+    {
+      "title": "VIX 波動率",
+      "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=VIXCLS&cosd=2026-05-15&coed=2026-11-11",
+      "dataDate": "2026-11-09",
+      "fetchedAt": "2026-11-11T11:09:52+08:00",
+      "status": "ok"
+    },
+    {
+      "title": "美國 10 年實質殖利率",
+      "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DFII10&cosd=2026-05-15&coed=2026-11-11",
+      "dataDate": "2026-11-09",
+      "fetchedAt": "2026-11-11T11:09:52+08:00",
+      "status": "ok"
+    },
+    {
+      "title": "Chicago Fed 金融情勢",
+      "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=NFCI&cosd=2026-05-15&coed=2026-11-11",
+      "dataDate": "2026-10-30",
+      "fetchedAt": "2026-11-11T11:09:52+08:00",
+      "status": "ok"
+    },
+    {
+      "title": "Fed 廣義美元指數",
+      "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DTWEXBGS&cosd=2026-05-15&coed=2026-11-11",
+      "dataDate": "2026-11-06",
+      "fetchedAt": "2026-11-11T11:09:52+08:00",
+      "status": "ok"
+    },
+    {
+      "title": "BEA 經濟行事曆",
+      "url": "https://www.bea.gov/news/schedule/ics/online-calendar-subscription.ics",
+      "status": "ok",
+      "note": "本週擷取 0 筆；不表示所有總經事件皆已涵蓋",
+      "fetchedAt": "2026-11-11T11:09:53+08:00"
+    },
+    {
+      "title": "BLS 經濟行事曆",
+      "url": "https://www.bls.gov/schedule/news_release/bls.ics",
+      "status": "ok",
+      "note": "本週擷取 3 筆；不表示所有總經事件皆已涵蓋",
+      "fetchedAt": "2026-11-11T11:09:53+08:00"
+    },
+    {
+      "title": "Fed 已發布演說",
+      "url": "https://www.federalreserve.gov/feeds/speeches.xml",
+      "dataDate": "2026-11-11",
+      "status": "ok",
+      "note": "本週 2 筆已核實紀錄",
+      "fetchedAt": "2026-11-11T11:09:53+08:00"
+    },
+    {
+      "title": "FOMC 會議日曆",
+      "url": "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm",
+      "dataDate": "2026-11-11",
+      "status": "ok",
+      "note": "本週 0 筆已核實紀錄",
+      "fetchedAt": "2026-11-11T11:09:53+08:00"
+    },
+    {
+      "title": "證交所開休市日曆",
+      "url": "https://www.twse.com.tw/rwd/zh/holidaySchedule/holidaySchedule?response=json&queryYear=115",
+      "dataDate": "2026-11-11",
+      "fetchedAt": "2026-11-11T11:09:52+08:00"
+    },
+    {
+      "title": "方舟運算 RSS",
+      "url": "https://feeds.soundon.fm/podcasts/049c00d3-d675-461e-9a11-522694633cdb.xml",
+      "dataDate": "2026-09-12",
+      "fetchedAt": "2026-11-11T11:09:53+08:00"
+    }
+  ],
+  "calendar": {
+    "date": "2026-11-11",
+    "isTradingDay": true,
+    "status": "verified",
+    "note": "官方年度日曆列為交易日；臨時停市仍以證交所公告為準",
+    "source": "https://www.twse.com.tw/rwd/zh/holidaySchedule/holidaySchedule?response=json&queryYear=115",
+    "fetchedAt": "2026-11-11T11:09:52+08:00"
+  },
+  "status": "partial",
+  "note": "真實來源擷取完成，但總經覆蓋尚未齊全。所有金額與漲跌僅代表標示日期，利率用中性色。",
+  "gaps": [
+    "總經排程採 BLS、BEA 與 Fed 官方來源；空白不代表今天沒有重大事件",
+    "ISM／初領失業金／零售／台灣出口／央行／外資與國際事件的完整自動研究仍待接可靠資料源；Fed 談話僅取官方已發布項目",
+    "總經市場預期值及實際公布值待可靠來源",
+    "Spotify ID 尚未確認可用；會員看板與 Threads 未讀取",
+    "未定義崩跌、連續未執行與規則優先順序；衝突時不產生交易指令"
+  ],
+  "aiGenerated": true
+}
