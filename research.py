@@ -18,7 +18,7 @@ def fetch(url):
         return b.decode('utf-8-sig')
 
 def calendar(day):
-    d=datetime.fromisoformat(day).date(); u=f'https://www.twse.com.tw/rwd/zh/holidaySchedule/holidaySchedule?response=json&queryYear={d.year-1911}'
+    d=datetime.fromisoformat(day).date(); u=f'https://www.twse.com.tw/rwd/zh/holidaySchedule/holidaySchedule?response=json&date={d.year}0101'
     try:
         raw=json.loads(fetch(u))
         if str(raw.get('queryYear')) not in [str(d.year),str(d.year-1911)] or len(raw.get('data',[]))<10: raise ValueError('日曆年份或資料不完整')
